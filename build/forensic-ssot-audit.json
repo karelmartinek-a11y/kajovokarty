@@ -1,0 +1,253 @@
+{
+  "product": "KájovoKarty",
+  "ssot_version": "1.1",
+  "ssot_sha256": "cc8cde98cb8c7be0fd3869ab6e1ac03bf14b89a56d8b9e34c680bc75e62983d5",
+  "repository": "/mnt/data/kajovokarty_contrast_fix/KajovoKarty",
+  "environment": {
+    "platform": "Linux-6.12.13-x86_64-with-glibc2.41",
+    "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
+    "cwd": "/mnt/data/kajovokarty_contrast_fix/KajovoKarty"
+  },
+  "verdict": "BLOCKED",
+  "local_static_checks_passed": true,
+  "failed_findings": [],
+  "blocked_gates": [
+    "WINDOWS-RUN-BAT",
+    "QT-GUI-DPI",
+    "WINDOWS-EXE-INSTALLER",
+    "STATIC-LINT-TYPE-TOOLS"
+  ],
+  "findings": [
+    {
+      "id": "SSOT-IDENTITY",
+      "area": "SSOT",
+      "status": "PASS",
+      "detail": "Autoritativní SSOT 1.1 byl načten a identifikován.",
+      "evidence": [
+        "/mnt/data/KajovoKarty_FINALNI_SSOT_v1.1_NEZAVISLE_AUDITOVANO(1)(1).docx",
+        "sha256=cc8cde98cb8c7be0fd3869ab6e1ac03bf14b89a56d8b9e34c680bc75e62983d5"
+      ]
+    },
+    {
+      "id": "SSOT-ACCEPTANCE-CARDINALITY",
+      "area": "SSOT",
+      "status": "PASS",
+      "detail": "SSOT=162, manifest=162, očekáváno=162",
+      "evidence": [
+        "docs/SSOT_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "SSOT-ACTION-CARDINALITY",
+      "area": "SSOT",
+      "status": "PASS",
+      "detail": "38 akcí; chybějící v DOCX: []",
+      "evidence": [
+        "docs/SSOT_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "SSOT-UI-CARDINALITY",
+      "area": "SSOT",
+      "status": "PASS",
+      "detail": "76 UI komponent; chybějící v DOCX: []",
+      "evidence": [
+        "docs/SSOT_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "UI-ACTION-REGISTRY",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "enum=38, specs=38, přesné odchylky=[]",
+      "evidence": [
+        "src/kajovokarty/ui/action_registry.py"
+      ]
+    },
+    {
+      "id": "UI-ACTION-HANDLERS",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "Akce bez dohledatelného handleru: []",
+      "evidence": [
+        "src/kajovokarty/ui/main_window.py"
+      ]
+    },
+    {
+      "id": "UI-OBJECT-ACTION-MATRIX",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "Objekty=15, chybějící vazby=[]",
+      "evidence": [
+        "docs/OBJECT_ACTION_MATRIX.json",
+        "src/kajovokarty/ui/action_registry.py"
+      ]
+    },
+    {
+      "id": "UI-COMPONENT-REGISTRY",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "enum=76, specs=76, přesné odchylky=[]",
+      "evidence": [
+        "src/kajovokarty/ui/component_registry.py"
+      ]
+    },
+    {
+      "id": "UI-COMPONENT-LIVE-BINDINGS",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "Komponenty bez dohledatelné živé vazby: []",
+      "evidence": [
+        "src/kajovokarty/ui/"
+      ]
+    },
+    {
+      "id": "REPO-TREE",
+      "area": "Repository",
+      "status": "PASS",
+      "detail": "Chybí: []",
+      "evidence": []
+    },
+    {
+      "id": "REPO-SECRETS",
+      "area": "Security",
+      "status": "PASS",
+      "detail": "Nálezy: []",
+      "evidence": []
+    },
+    {
+      "id": "REPO-PLACEHOLDERS",
+      "area": "Repository",
+      "status": "PASS",
+      "detail": "Nálezy: []",
+      "evidence": []
+    },
+    {
+      "id": "REPO-NO-INPUTS",
+      "area": "Security",
+      "status": "PASS",
+      "detail": "Nálezy: []",
+      "evidence": []
+    },
+    {
+      "id": "PY-AST",
+      "area": "Static",
+      "status": "PASS",
+      "detail": "Chyby: []",
+      "evidence": []
+    },
+    {
+      "id": "MONEY-NO-FLOAT",
+      "area": "Finance",
+      "status": "PASS",
+      "detail": "Nálezy: []",
+      "evidence": []
+    },
+    {
+      "id": "API-READ-ONLY",
+      "area": "API",
+      "status": "PASS",
+      "detail": "forbidden=[], endpoint=True, headers=True",
+      "evidence": [
+        "src/kajovokarty/infrastructure/better_hotel/"
+      ]
+    },
+    {
+      "id": "DB-MIGRATIONS",
+      "area": "Database",
+      "status": "PASS",
+      "detail": "migrace=[1, 2, 3, 4], integrity=ok, foreign_key_errors=0",
+      "evidence": [
+        "migrations/"
+      ]
+    },
+    {
+      "id": "BOOTSTRAP-STATIC",
+      "area": "Build",
+      "status": "PASS",
+      "detail": "ASCII bez BOM, výhradně CRLF.",
+      "evidence": [
+        "run.bat",
+        "scripts/bootstrap.py"
+      ]
+    },
+    {
+      "id": "BUILD-REPRODUCIBLE-STATIC",
+      "area": "Build",
+      "status": "PASS",
+      "detail": "Chybí: []",
+      "evidence": [
+        "build/KajovoKarty.spec",
+        "build/installer/KajovoKarty.iss",
+        "scripts/build_release.py",
+        ".github/workflows/windows-release.yml"
+      ]
+    },
+    {
+      "id": "WINDOWS-RUN-BAT",
+      "area": "Runtime",
+      "status": "BLOCKED",
+      "detail": "Host=Linux x86_64; skutečný Windows CMD nebyl dostupný.",
+      "evidence": [
+        "run.bat"
+      ]
+    },
+    {
+      "id": "QT-GUI-DPI",
+      "area": "UI runtime",
+      "status": "BLOCKED",
+      "detail": "PySide6 runtime není dostupný: No module named 'PySide6'",
+      "evidence": [
+        "tests/ui/test_gui_smoke.py",
+        "scripts/gui_layout_audit.py"
+      ]
+    },
+    {
+      "id": "WINDOWS-EXE-INSTALLER",
+      "area": "Build",
+      "status": "BLOCKED",
+      "detail": "Windows EXE a Inno Setup instalátor nelze na tomto hostu skutečně sestavit a spustit.",
+      "evidence": [
+        "scripts/build_release.py",
+        "build/KajovoKarty.iss"
+      ]
+    },
+    {
+      "id": "LOCAL-TEST-SUITE",
+      "area": "Tests",
+      "status": "PASS",
+      "detail": "passed=121, failed=0, skipped=2; skipped GUI test není release PASS.",
+      "evidence": [
+        "build/local-test-results.json"
+      ]
+    },
+    {
+      "id": "LOCAL-COVERAGE-EVIDENCE",
+      "area": "Tests",
+      "status": "PASS",
+      "detail": "Lokální coverage=41.35 %. UI moduly nejsou bez PySide6 runtime pokryté a tento údaj nenahrazuje Windows GUI audit.",
+      "evidence": [
+        "build/coverage-final.json"
+      ]
+    },
+    {
+      "id": "STATIC-LINT-TYPE-TOOLS",
+      "area": "Static",
+      "status": "BLOCKED",
+      "detail": "Nedostupné nástroje na tomto hostu: ['ruff', 'mypy']",
+      "evidence": [
+        "pyproject.toml",
+        ".github/workflows/windows-release.yml"
+      ]
+    },
+    {
+      "id": "TRACEABILITY-162",
+      "area": "Audit",
+      "status": "PASS",
+      "detail": "Chybějící řádky: []",
+      "evidence": [
+        "docs/SSOT_TRACEABILITY.md"
+      ]
+    }
+  ]
+}

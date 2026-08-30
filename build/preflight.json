@@ -1,0 +1,33 @@
+{
+  "platform": "Windows-10-10.0.19045-SP0",
+  "python": "3.11.9",
+  "architecture_bits": 64,
+  "python_supported": true,
+  "windows_nt_major": 10,
+  "windows_supported": true,
+  "sqlite_version": "3.45.1",
+  "sqlite_fts5": true,
+  "files": {
+    "src\\kajovokarty\\__main__.py": true,
+    "resources": true,
+    "migrations\\001_initial.sql": true,
+    "migrations\\002_search_and_integrity.sql": true,
+    "migrations\\003_operational_hardening.sql": true,
+    "migrations\\004_operation_recovery.sql": true,
+    "migrations\\005_document_payment_status.sql": true,
+    "requirements.lock": true
+  },
+  "writeable": true,
+  "import_PySide6": "6.10.1",
+  "import_httpx": "0.28.1",
+  "import_openpyxl": "3.1.5",
+  "import_xlrd": "2.0.1",
+  "import_dateutil": "2.9.0.post0",
+  "import_platformdirs": "4.3.8",
+  "import_cryptography": "45.0.5",
+  "import_reportlab": "4.4.2",
+  "database_migration": true,
+  "schema_version": "5",
+  "status": "PASS",
+  "failures": []
+}

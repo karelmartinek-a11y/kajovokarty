@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "checks": {
+    "run_bat_ascii": true,
+    "run_bat_no_bom": true,
+    "run_bat_crlf_only": true,
+    "run_bat_forwards_mode": true,
+    "bootstrap_declares_run_option": true,
+    "bootstrap_declares_check_option": true,
+    "bootstrap_declares_test_option": true,
+    "bootstrap_declares_repair_option": true,
+    "bootstrap_mutually_exclusive_required": true
+  }
+}

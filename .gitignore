@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/work/
+build/pyinstaller/
+build/release/*.exe
+build/*.log
+bootstrap-logs/
+*.sqlite3
+*.sqlite3-*

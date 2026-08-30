@@ -1,0 +1,112 @@
+{
+  "product": "KájovoKarty",
+  "version": "1.1.0",
+  "verdict": "BLOCKED",
+  "authoritative_ssot": "KájovoKarty – finální auditovaný SSOT 1.1",
+  "executed": {
+    "compileall": {
+      "status": "PASS",
+      "command": "PYTHONPATH=src python -m compileall -q src tests scripts"
+    },
+    "pytest_with_coverage": {
+      "status": "PASS_WITH_TWO_ENVIRONMENT_SKIPS",
+      "command": "PYTHONPATH=src:. python -m pytest -q --cov=src/kajovokarty --cov-report=json:build/coverage-final.json --cov-report=term-missing tests",
+      "passed": 121,
+      "skipped": 2,
+      "failed": 0,
+      "coverage_percent": 41.35,
+      "log": "build/pytest-ui-contrast-fix.txt",
+      "coverage": "build/coverage-final.json"
+    },
+    "database_migrations": {
+      "status": "PASS",
+      "versions": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "integrity_check": "ok",
+      "foreign_key_check": "ok"
+    },
+    "forensic_ssot_audit": {
+      "status": "BLOCKED_ONLY_BY_EXTERNAL_GATES",
+      "report": "build/forensic-ssot-audit.json",
+      "markdown": "build/forensic-ssot-audit.md"
+    },
+    "repository_static_audit": {
+      "status": "PASS_AFTER_RELEASE_CLEANUP",
+      "report": "build/repository-audit.json",
+      "log": "build/repository-audit.txt"
+    },
+    "ruff": {
+      "status": "BLOCKED_DEPENDENCY_UNAVAILABLE",
+      "log": "build/ruff-version.txt"
+    },
+    "mypy": {
+      "status": "BLOCKED_DEPENDENCY_UNAVAILABLE",
+      "log": "build/mypy-version.txt"
+    },
+    "run_bat_static_regression": {
+      "status": "PASS",
+      "checks": [
+        "ASCII without BOM",
+        "CRLF only",
+        "all GOTO targets exist",
+        "required modes and paths present"
+      ],
+      "evidence": "build/run-bat-static-audit.json"
+    },
+    "bootstrap_cli_regression": {
+      "status": "PASS",
+      "checks": [
+        "--run accepted as a real argparse option",
+        "--check accepted as a real argparse option",
+        "--test accepted as a real argparse option",
+        "--repair accepted as a real argparse option",
+        "missing mode returns argparse code 2",
+        "run.bat forwards %MODE% to bootstrap.py"
+      ],
+      "evidence": "tests/unit/test_bootstrap_cli.py"
+    },
+    "ui_contrast_audit": {
+      "status": "PASS",
+      "standard": "WCAG 2.x AA, minimum 4.5:1",
+      "themes": [
+        "normal",
+        "high_contrast"
+      ],
+      "minimum_observed_ratio": 5.861,
+      "hardcoded_colors_outside_theme": 0,
+      "legacy_fault_patterns": 0,
+      "report": "build/ui-contrast-audit.json"
+    }
+  },
+  "corrected_deviations": [
+    "Booking vyhledávání odkazovalo na neexistující sloupec payment_id; dotaz nyní korektně spojuje booking_payment_line s booking_payout_batch.",
+    "Technické objekty Přílohy B nebyly všechny dosažitelné v živém vyhledávání a vztazích; doplněny Allocation, ImportRun, Quarantine, AuditEvent, Candidate, BookingReference, Bill, BillItem a SourceRevisionAlert.",
+    "Konflikt Booking reference neměl samostatné auditované a vratné ruční potvrzení či odmítnutí; doplněn BookingReferenceResolutionService včetně undo/redo.",
+    "Read-only obnovení z API chybělo pro Bill a BillItem; doplněny dokumentované GET cesty.",
+    "Dashboard aktuálnosti zdrojů a horní stavové prvky byly informační štítky bez primární akce; nahrazeny živými ovladači napojenými na Importy a Centrum operací.",
+    "Obnova přerušeného Booking importu spouštěla běh dvakrát; duplicitní volání bylo odstraněno.",
+    "Příloha B neměla strojově kontrolovanou objektově-akční matici; doplněn docs/OBJECT_ACTION_MATRIX.json a konformanční test.",
+    "Stará dokumentace nesprávně uváděla otevřenou odchylku UI-24; implementace tří drop cílů byla znovu staticky a integračně ověřena.",
+    "run.bat byl uložen s LF-only konci řádků a Windows CMD jej rozpadal na neplatné fragmenty; přepsán jako ASCII bez BOM s výhradně CRLF, jednodušším flow a diagnostickým run-bat.log.",
+    "bootstrap.py deklaroval řetězce --run/--check/--test/--repair jako poziční argparse argument. Argparse je proto považoval za volby a hlásil chybějící mode; režimy jsou nyní skutečné povinné vzájemně výlučné přepínače.",
+    "Globální QWidget background přebarvoval i tlačítka a horní lišta jim současně vnucovala bílý text bez explicitního pozadí; doplněn centralizovaný QPalette/QSS theme engine s ověřeným kontrastem všech stavů tlačítek a ostatních textových komponent."
+  ],
+  "not_executed": [
+    "run.bat --check on Windows",
+    "run.bat --test on Windows",
+    "idempotent second run.bat execution",
+    "PySide6 GUI smoke without tokens",
+    "DPI and accessibility audit at 100/125/150/175/200 percent",
+    "KajovoKarty.exe build and smoke",
+    "Inno Setup installer build/install/uninstall smoke",
+    "ruff and mypy with locked versions"
+  ],
+  "acceptance_scenarios_total": 162,
+  "traceability_file": "docs/SSOT_TRACEABILITY.md",
+  "blockers_file": "BLOCKERS.json",
+  "generated_at_utc": "2026-07-31T19:16:51Z"
+}

@@ -1,0 +1,20 @@
+{
+  "issue": "Unreadable button labels caused by inherited light QWidget background combined with white top-bar button text.",
+  "status": "CORRECTED_STATICALLY",
+  "changes": [
+    "Centralized normal and high-contrast color tokens in src/kajovokarty/ui/theme.py",
+    "Applied Fusion style plus application-wide QPalette and QSS",
+    "Defined explicit foreground/background for normal, hover, pressed, checked, focus and disabled button states",
+    "Covered inputs, tables, headers, menus, tabs, navigation, tooltips, progress bars, validation and review banners",
+    "Removed hard-coded UI colors outside the central theme",
+    "Added static WCAG contrast audit and Qt runtime regression test"
+  ],
+  "static_result": {
+    "normal_theme_minimum_ratio": 5.861,
+    "high_contrast_theme_minimum_ratio": 9.571,
+    "required_minimum_ratio": 4.5,
+    "hardcoded_colors_outside_theme": 0,
+    "legacy_fault_patterns": 0
+  },
+  "runtime_note": "Actual Windows Qt rendering remains part of the Windows release gate."
+}

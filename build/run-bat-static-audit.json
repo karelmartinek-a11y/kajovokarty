@@ -1,0 +1,13 @@
+{
+  "product": "KájovoKarty",
+  "check": "run.bat CMD-safe transport",
+  "status": "PASS",
+  "ascii_only": true,
+  "utf8_bom": false,
+  "crlf_count": 167,
+  "bare_lf_count": 0,
+  "starts_with": "@echo off\\r\\n",
+  "regression_tests": 110,
+  "generated_at_utc": "2026-07-31T18:39:03Z",
+  "runtime_note": "Skutečný Windows CMD runtime musí být znovu ověřen uživatelem nebo Windows runnerem."
+}

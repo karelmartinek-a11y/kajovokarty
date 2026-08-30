@@ -1,0 +1,83 @@
+name: Windows validation and release build
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate-build:
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.9'
+          architecture: 'x64'
+          cache: 'pip'
+      - name: Install locked dependencies
+        shell: cmd
+        run: |
+          python -m venv .venv
+          .venv\Scripts\python -m pip install pip==25.1.1
+          .venv\Scripts\python -m pip install -r requirements.lock
+      - name: Verify run.bat check
+        shell: cmd
+        run: run.bat --check
+      - name: Verify run.bat tests
+        shell: cmd
+        run: run.bat --test
+      - name: Static checks
+        shell: cmd
+        run: |
+          .venv\Scripts\python -m ruff check src tests scripts
+          .venv\Scripts\python -m mypy src
+      - name: Static UI contrast audit
+        shell: cmd
+        run: .venv\Scripts\python scripts\ui_contrast_audit.py --root . --output build\ui-contrast-audit.json
+      - name: Source GUI smoke without tokens
+        shell: cmd
+        env:
+          QT_QPA_PLATFORM: offscreen
+          KAJOVOKARTY_TEST_DATA_DIR: ${{ runner.temp }}\kajovokarty-smoke
+        run: .venv\Scripts\python -m kajovokarty --smoke-test
+      - name: Runtime button contrast audit
+        shell: cmd
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: .venv\Scripts\python -m pytest -q tests\ui\test_theme_runtime.py
+      - name: GUI layout and DPI audit
+        shell: powershell
+        run: |
+          $scales = @("1", "1.25", "1.5", "1.75", "2")
+          foreach ($scale in $scales) {
+            $env:QT_QPA_PLATFORM = "offscreen"
+            $env:QT_SCALE_FACTOR = $scale
+            $safe = $scale.Replace(".", "_")
+            .venv\Scripts\python scripts\gui_layout_audit.py --output "build/gui-audit-$safe.json" --width 1280 --height 720
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+      - name: Install Inno Setup
+        shell: powershell
+        run: choco install innosetup --no-progress -y
+      - name: Build EXE and installer
+        shell: cmd
+        run: .venv\Scripts\python scripts\build_release.py --skip-tests
+      - name: Installed product and uninstall smoke
+        shell: powershell
+        run: scripts\installer_smoke.ps1 -Installer "build\release\KajovoKarty-Setup-x64-1.1.0.exe" -Version "1.1.0"
+      - name: Idempotent second check
+        shell: cmd
+        run: run.bat --check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KajovoKarty-Windows-x64
+          path: |
+            build/release/KajovoKarty.exe
+            build/release/KajovoKarty-Setup-x64-1.1.0.exe
+            build/preflight.json
+            build/gui-audit-*.json
+            build/gui-audit-*.png
+            build/ui-contrast-audit.json
+            build/audit_logs/installer-*.log

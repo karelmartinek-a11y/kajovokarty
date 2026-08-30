@@ -1,0 +1,67 @@
+{
+  "root": "/mnt/data/kajovokarty_contrast_fix/KajovoKarty",
+  "sha256_manifest": "8847edcc3809a1fdb2a364c7aae66e5313be93ecd9d258fcd777899ceaa40a8e",
+  "passed": true,
+  "checks": [
+    {
+      "name": "required_repository_tree",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "name": "release_cache_hygiene",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "name": "no_original_inputs",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "name": "secret_scan",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "name": "placeholder_scan",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "name": "python_ast",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "name": "financial_float_guard",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "name": "migration_sequence",
+      "passed": true,
+      "detail": "verze [1, 2, 3, 4]"
+    },
+    {
+      "name": "locked_dependencies",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "name": "run_bat_static_contract",
+      "passed": true,
+      "detail": "OK – ASCII bez BOM, výhradně CRLF"
+    },
+    {
+      "name": "run_status_coherence",
+      "passed": true,
+      "detail": "BLOCKED"
+    },
+    {
+      "name": "windows_artifact_truthfulness",
+      "passed": true,
+      "detail": "žádné falešné EXE v BLOCKED balíku"
+    }
+  ]
+}

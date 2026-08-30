@@ -1,0 +1,38 @@
+{
+  "product": "KájovoKarty",
+  "version": "1.1.0",
+  "status": "BLOCKED",
+  "phase": "KájaAuditor – forenzní audit, opravy a release gate",
+  "blockers": [
+    {
+      "id": "BLK-WINDOWS-RUNNER",
+      "severity": "release_blocker",
+      "kind": "environment",
+      "description": "Dostupné prostředí není skutečný Windows 10/11 x64. Uživatelský runtime důkaz potvrdil, že Python 3.11.9 se nainstaloval a .venv vzniklo. Následné selhání bylo způsobeno tím, že bootstrap.py chybně deklaroval --run/--check/--test/--repair jako poziční argumenty argparse; oprava nyní používá skutečné vzájemně výlučné CLI přepínače a je pokryta regresními testy. V tomto hostu však stále nelze pravdivě dokončit run.bat --check, run.bat --test, GUI start ani idempotentní druhé spuštění.",
+      "required_to_clear": "Na Windows 10/11 x64 rozbalit tento nový ZIP a spustit run.bat, run.bat --check, run.bat --test a následně druhé run.bat --check."
+    },
+    {
+      "id": "BLK-QT-GUI-DPI",
+      "severity": "release_blocker",
+      "kind": "environment",
+      "description": "PySide6 není v dostupném runtime. Zdrojový kontrast byl forenzně opraven a statický WCAG audit obou témat prošel, ale skutečné vykreslení všech obrazovek, stavů tlačítek, keyboard-only průchody, screen reader, fokus, přetékání a DPI 100/125/150/175/200 % nebyly v tomto hostu provedeny.",
+      "required_to_clear": "Na Windows runneru nainstalovat requirements.lock, spustit tests/ui/test_gui_smoke.py a tests/ui/test_theme_runtime.py a poté scripts/gui_layout_audit.py pro všech pět měřítek."
+    },
+    {
+      "id": "BLK-WINDOWS-ARTIFACTS",
+      "severity": "release_blocker",
+      "kind": "environment",
+      "description": "PyInstaller vytváří cílový artefakt pro hostitelský systém a Inno Setup 6 není dostupný. KajovoKarty.exe ani KajovoKarty-Setup-x64-1.1.0.exe proto nebyly vytvořeny, nainstalovány, spuštěny ani odinstalovány.",
+      "required_to_clear": "Na Windows x64 spustit scripts/build_release.py a scripts/installer_smoke.ps1 a uložit skutečné logy a artefakty."
+    },
+    {
+      "id": "BLK-LINT-TYPE-RUNTIME",
+      "severity": "release_blocker",
+      "kind": "environment",
+      "description": "Dostupný balíčkový zdroj neposkytuje moduly ruff ani mypy. AST audit a compileall prošly, ale závazný ruff a mypy gate nebyl lokálně vykonán.",
+      "required_to_clear": "Spustit uzamčené ruff==0.12.3 a mypy==1.17.0 v připraveném Windows workflow s dostupným balíčkovým zdrojem."
+    }
+  ],
+  "known_implementation_deviations": [],
+  "generated_at_utc": "2026-07-31T19:16:51Z"
+}

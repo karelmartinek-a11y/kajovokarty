@@ -1,0 +1,15 @@
+Repository: /mnt/data/kajovokarty_contrast_fix/KajovoKarty
+Manifest SHA-256: 8847edcc3809a1fdb2a364c7aae66e5313be93ecd9d258fcd777899ceaa40a8e
+PASS required_repository_tree: OK
+PASS release_cache_hygiene: OK
+PASS no_original_inputs: OK
+PASS secret_scan: OK
+PASS placeholder_scan: OK
+PASS python_ast: OK
+PASS financial_float_guard: OK
+PASS migration_sequence: verze [1, 2, 3, 4]
+PASS locked_dependencies: OK
+PASS run_bat_static_contract: OK – ASCII bez BOM, výhradně CRLF
+PASS run_status_coherence: BLOCKED
+PASS windows_artifact_truthfulness: žádné falešné EXE v BLOCKED balíku
+VERDICT: PASS

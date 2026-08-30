@@ -1,0 +1,65 @@
+{
+  "source": "SSOT 1.1 Appendix B",
+  "objects": {
+    "INVOICE": {
+      "views": ["Dashboard", "Párování", "Vyhledávání", "Sestavy"],
+      "required_actions": ["OPEN_DETAIL", "OPEN_IN_MATCHING", "ADD_TO_TRAY", "PAIR_SELECTED", "SPLIT_DOCUMENT", "MARK_CASH", "MARK_OTHER", "MANUAL_RESOLVE", "INCLUDE", "EXCLUDE", "SHOW_AUDIT", "SHOW_SOURCE_ROW", "COPY_PRIMARY_ID", "COPY_ALL_IDS", "EXPORT_SELECTION"]
+    },
+    "BOOKING": {
+      "views": ["Párování", "Vyhledávání", "Sestavy", "Import detail"],
+      "required_actions": ["OPEN_DETAIL", "OPEN_IN_MATCHING", "ADD_TO_TRAY", "SPLIT_SOURCE", "SHOW_RELATIONS", "SHOW_AUDIT", "SHOW_SOURCE_ROW", "COPY_PRIMARY_ID", "COPY_ALL_IDS", "EXPORT_SELECTION"]
+    },
+    "CARD": {
+      "views": ["Párování", "Vyhledávání", "Sestavy", "Import detail"],
+      "required_actions": ["OPEN_DETAIL", "OPEN_IN_MATCHING", "ADD_TO_TRAY", "SPLIT_SOURCE", "SHOW_RELATIONS", "SHOW_AUDIT", "SHOW_SOURCE_ROW", "COPY_PRIMARY_ID", "COPY_ALL_IDS", "EXPORT_SELECTION"]
+    },
+    "MATCH_GROUP": {
+      "views": ["Dashboard drill-down", "Párování", "Vyhledávání", "Sestavy"],
+      "required_actions": ["OPEN_DETAIL", "OPEN_IN_MATCHING", "MARK_CASH", "MARK_OTHER", "MANUAL_RESOLVE", "REMOVE_GROUP", "SHOW_AUDIT", "COPY_PRIMARY_ID", "COPY_ALL_IDS", "EXPORT_SELECTION", "REVALIDATE_GROUP", "REOPEN_MANUAL_RESOLUTION"]
+    },
+    "ALLOCATION": {
+      "views": ["Párování", "Detail skupiny", "Audit"],
+      "required_actions": ["OPEN_DETAIL", "EDIT_ALLOCATION", "REMOVE_ALLOCATION", "SHOW_AUDIT", "COPY_PRIMARY_ID", "COPY_ALL_IDS"]
+    },
+    "RESERVATION": {
+      "views": ["Vyhledávání", "Detail dokladu", "Detail Booking zdroje"],
+      "required_actions": ["OPEN_DETAIL", "OPEN_IN_MATCHING", "SHOW_RELATIONS", "REFRESH_OBJECT", "SHOW_AUDIT", "SHOW_SOURCE_ROW", "COPY_PRIMARY_ID", "COPY_ALL_IDS"]
+    },
+    "IMPORT_RUN": {
+      "views": ["Dashboard", "Importy", "Audit"],
+      "required_actions": ["OPEN_DETAIL", "RETRY_RUN", "OPEN_QUARANTINE", "SHOW_RELATIONS", "SHOW_AUDIT", "COPY_PRIMARY_ID", "COPY_ALL_IDS", "EXPORT_SELECTION"]
+    },
+    "QUARANTINE": {
+      "views": ["Importy"],
+      "required_actions": ["OPEN_DETAIL", "RESOLVE_QUARANTINE", "SHOW_AUDIT", "SHOW_SOURCE_ROW", "COPY_PRIMARY_ID", "COPY_ALL_IDS", "EXPORT_SELECTION"]
+    },
+    "AUDIT": {
+      "views": ["Audit"],
+      "required_actions": ["OPEN_DETAIL", "SHOW_RELATIONS", "UNDO", "COPY_PRIMARY_ID", "COPY_ALL_IDS"]
+    },
+    "CANDIDATE": {
+      "views": ["Párování", "Vyhledávání", "Detail"],
+      "required_actions": ["OPEN_DETAIL", "ACCEPT_CANDIDATE", "REJECT_CANDIDATE", "SHOW_RELATIONS", "EXPAND_SEARCH_WINDOW", "SHOW_AUDIT", "COPY_PRIMARY_ID", "COPY_ALL_IDS", "EXPORT_SELECTION"]
+    },
+    "MANUAL": {
+      "views": ["Párování", "Vyhledávání", "Sestavy", "Audit"],
+      "required_actions": ["OPEN_DETAIL", "OPEN_IN_MATCHING", "EDIT_MANUAL_SETTLEMENT", "REMOVE_MANUAL_SETTLEMENT", "SHOW_AUDIT", "COPY_PRIMARY_ID", "COPY_ALL_IDS", "EXPORT_SELECTION"]
+    },
+    "BOOKING_REFERENCE": {
+      "views": ["Detail rezervace", "Konflikty", "Audit"],
+      "required_actions": ["OPEN_DETAIL", "ACCEPT_CANDIDATE", "REJECT_CANDIDATE", "SHOW_RELATIONS", "REFRESH_OBJECT", "SHOW_AUDIT", "SHOW_SOURCE_ROW", "COPY_PRIMARY_ID", "COPY_ALL_IDS"]
+    },
+    "BILL": {
+      "views": ["Detail rezervace", "Detail dokladu", "Vyhledávání"],
+      "required_actions": ["OPEN_DETAIL", "SHOW_RELATIONS", "REFRESH_OBJECT", "SHOW_AUDIT", "SHOW_SOURCE_ROW", "COPY_PRIMARY_ID", "COPY_ALL_IDS"]
+    },
+    "BILL_ITEM": {
+      "views": ["Detail rezervace", "Detail dokladu", "Vyhledávání"],
+      "required_actions": ["OPEN_DETAIL", "SHOW_RELATIONS", "REFRESH_OBJECT", "SHOW_AUDIT", "SHOW_SOURCE_ROW", "COPY_PRIMARY_ID", "COPY_ALL_IDS"]
+    },
+    "REVISION_ALERT": {
+      "views": ["Dashboard", "Párování", "Vyhledávání", "Audit"],
+      "required_actions": ["OPEN_DETAIL", "SHOW_RELATIONS", "REVALIDATE_GROUP", "REOPEN_MANUAL_RESOLUTION", "SHOW_AUDIT", "COPY_PRIMARY_ID", "COPY_ALL_IDS"]
+    }
+  }
+}

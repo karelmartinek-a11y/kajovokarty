@@ -1,0 +1,1430 @@
+{
+  "product": "KájovoKarty",
+  "ssot_version": "1.1",
+  "acceptance_scenarios": [
+    {
+      "id": "API-01",
+      "scenario": "Endpoint je pevně zakódovaný, v UI není editovatelný a odpovídá /api/connector/v/1."
+    },
+    {
+      "id": "API-02",
+      "scenario": "Tokeny se zadávají pouze v UI, ukládají šifrovaně a nejsou v SQLite ani logu."
+    },
+    {
+      "id": "API-03",
+      "scenario": "Každý request používá X-Access-Token a X-Client-Token bez Bearer."
+    },
+    {
+      "id": "API-04",
+      "scenario": "Runtime trace neobsahuje žádný POST, PUT, PATCH ani DELETE."
+    },
+    {
+      "id": "API-05",
+      "scenario": "Cursor druhé stránky opakuje všechny původní filtry."
+    },
+    {
+      "id": "API-06",
+      "scenario": "count=25 a meta.total_count/cursor/has_more jsou zpracovány správně."
+    },
+    {
+      "id": "API-07",
+      "scenario": "429 respektuje Retry-After; 5xx používá omezený backoff."
+    },
+    {
+      "id": "API-08",
+      "scenario": "Zrušení sync rollbackne nedokončený blok a ponechá poslední checkpoint."
+    },
+    {
+      "id": "API-09",
+      "scenario": "X-Modified s meta-only detailem nesmaže existující objekt."
+    },
+    {
+      "id": "API-10",
+      "scenario": "paid a payed se sjednotí do paid_at a rozdíl mikrosekund nevytvoří konflikt."
+    },
+    {
+      "id": "API-11",
+      "scenario": "pay_method=2 bez paid_at je označen „Karta uvedena, úhrada nepotvrzena“."
+    },
+    {
+      "id": "API-12",
+      "scenario": "Booking.com faktura se zahrne i při pay_method=1."
+    },
+    {
+      "id": "API-13",
+      "scenario": "reservation.code 120268038.0 se uloží jako text 120268038."
+    },
+    {
+      "id": "API-14",
+      "scenario": "Více UUID se stejným code se seskupí bez ztráty samostatných účtů."
+    },
+    {
+      "id": "API-15",
+      "scenario": "Parser najde Booking ID v libovolném reservation_note[*].channel."
+    },
+    {
+      "id": "API-16",
+      "scenario": "Referenční vazba FA20265875 → 120268038 → 6689102875 projde."
+    },
+    {
+      "id": "API-17",
+      "scenario": "Rozdílné Original ID a Channel reservation id vytvoří konflikt."
+    },
+    {
+      "id": "API-18",
+      "scenario": "Dobropis print_format=3 se zpracuje záporným směrem."
+    },
+    {
+      "id": "BOOK-01",
+      "scenario": "CSV s UTF-8 BOM i bez BOM je přijat."
+    },
+    {
+      "id": "BOOK-02",
+      "scenario": "Pořadí 12 sloupců lze změnit bez změny významu."
+    },
+    {
+      "id": "BOOK-03",
+      "scenario": "Hlavička Datum vyplacení částky s krajní mezerou se normalizuje."
+    },
+    {
+      "id": "BOOK-04",
+      "scenario": "České datum 30. července 2026 se správně převede."
+    },
+    {
+      "id": "BOOK-05",
+      "scenario": "Číslo rezervace a ID platby zůstávají textem."
+    },
+    {
+      "id": "BOOK-06",
+      "scenario": "ID platby je payout batch, nikoli unikátní řádkový klíč."
+    },
+    {
+      "id": "BOOK-07",
+      "scenario": "Fixture má 31 řádků a 31 rozdílných Booking čísel."
+    },
+    {
+      "id": "BOOK-08",
+      "scenario": "Součet fixture je 5 210,70 EUR."
+    },
+    {
+      "id": "BOOK-09",
+      "scenario": "Přesný opakovaný import vytvoří 31 duplicit a 0 nových řádků."
+    },
+    {
+      "id": "BOOK-10",
+      "scenario": "Soubor s jedním novým řádkem vloží pouze tento řádek."
+    },
+    {
+      "id": "BOOK-11",
+      "scenario": "Stejný natural key s odlišným obsahem vytvoří konflikt."
+    },
+    {
+      "id": "BOOK-12",
+      "scenario": "Neznámý status jde do karantény a lze jej v UI namapovat."
+    },
+    {
+      "id": "BOOK-13",
+      "scenario": "Záporná částka se zachová a směr se neobrátí dvakrát."
+    },
+    {
+      "id": "BANK-01",
+      "scenario": "XLSX, XLS a CSV se načtou bez Microsoft Excelu."
+    },
+    {
+      "id": "BANK-02",
+      "scenario": "List se vybere podle schématu, nikoli názvu."
+    },
+    {
+      "id": "BANK-03",
+      "scenario": "Fixture má 92 řádků včetně hlavičky."
+    },
+    {
+      "id": "BANK-04",
+      "scenario": "Importuje se 64 řádků Prodej."
+    },
+    {
+      "id": "BANK-05",
+      "scenario": "23 Uzávěrek nevytvoří CardTransaction."
+    },
+    {
+      "id": "BANK-06",
+      "scenario": "2 prázdné a 2 souhrnné řádky jsou správně klasifikované."
+    },
+    {
+      "id": "BANK-07",
+      "scenario": "CZK součet je 129 677,50 CZK."
+    },
+    {
+      "id": "BANK-08",
+      "scenario": "EUR součet je 1 916,95 EUR."
+    },
+    {
+      "id": "BANK-09",
+      "scenario": "Smíšený souhrn 131 594,45 se nepoužije jako validace."
+    },
+    {
+      "id": "BANK-10",
+      "scenario": "SEQ ID zachová úvodní nuly a klíč terminal+SEQ je unikátní."
+    },
+    {
+      "id": "BANK-11",
+      "scenario": "Alfanumerický autorizační kód zůstane textem."
+    },
+    {
+      "id": "BANK-12",
+      "scenario": "Cashback, spropitné a DCC se nepřičítají automaticky k částce."
+    },
+    {
+      "id": "BANK-13",
+      "scenario": "Neznámý typ transakce jde do karantény a lze nastavit jeho význam."
+    },
+    {
+      "id": "BANK-14",
+      "scenario": "Přesná duplicita se přeskočí; konflikt klíče nepřepíše původní data."
+    },
+    {
+      "id": "MATCH-01",
+      "scenario": "Jedna faktura se spáruje s jednou kartou."
+    },
+    {
+      "id": "MATCH-02",
+      "scenario": "Jedna faktura se rozdělí mezi dvě karty."
+    },
+    {
+      "id": "MATCH-03",
+      "scenario": "Jedna faktura se rozdělí mezi Booking.com, dvě karty a hotovost."
+    },
+    {
+      "id": "MATCH-04",
+      "scenario": "Jedna platba se rozdělí mezi více faktur."
+    },
+    {
+      "id": "MATCH-05",
+      "scenario": "Více faktur a více zdrojů vytvoří jednu vyrovnávací skupinu."
+    },
+    {
+      "id": "MATCH-06",
+      "scenario": "Částečná vazba ponechá správné zbytky na obou stranách."
+    },
+    {
+      "id": "MATCH-07",
+      "scenario": "Přeplatek a nedoplatek se rozliší podle znaménka rozdílu."
+    },
+    {
+      "id": "MATCH-08",
+      "scenario": "CZK a EUR nelze dropnout do jedné skupiny."
+    },
+    {
+      "id": "MATCH-09",
+      "scenario": "Subset-sum respektuje maximální velikost kombinace."
+    },
+    {
+      "id": "MATCH-10",
+      "scenario": "Dvě rovnocenné kombinace vytvoří návrh, nikoli auto-match."
+    },
+    {
+      "id": "MATCH-11",
+      "scenario": "Auto-match vyžaduje threshold, margin a přesný finanční výsledek."
+    },
+    {
+      "id": "MATCH-12",
+      "scenario": "Ručně potvrzená vazba přežije nový import i přepočet."
+    },
+    {
+      "id": "MATCH-13",
+      "scenario": "Odmítnutý kandidát se bez změny faktů znovu nenabídne."
+    },
+    {
+      "id": "MATCH-14",
+      "scenario": "Dobropis a refundace se započítají správným směrem."
+    },
+    {
+      "id": "MATCH-15",
+      "scenario": "Doplnit jako hotovost nevyžaduje heslo a předvyplní zbytek."
+    },
+    {
+      "id": "MATCH-16",
+      "scenario": "Označit ručně vyřešené nevytvoří fiktivní externí transakci."
+    },
+    {
+      "id": "MATCH-17",
+      "scenario": "Rozpojení jedné vazby nemění ostatní vazby skupiny."
+    },
+    {
+      "id": "MATCH-18",
+      "scenario": "Undo a redo vytvoří auditní kompenzační eventy."
+    },
+    {
+      "id": "MATCH-19",
+      "scenario": "Konflikt row_version zabrání tichému přepsání změny."
+    },
+    {
+      "id": "UI-01",
+      "scenario": "Párovací obrazovka má synchronizovaný levý, střední a pravý panel."
+    },
+    {
+      "id": "UI-02",
+      "scenario": "Drag ghost zobrazuje počet, měnu a součet vybraných položek."
+    },
+    {
+      "id": "UI-03",
+      "scenario": "Povolený, částečný a zakázaný drop jsou rozlišeny textem, ikonou i barvou."
+    },
+    {
+      "id": "UI-04",
+      "scenario": "Zakázaný drop zobrazí konkrétní důvod."
+    },
+    {
+      "id": "UI-05",
+      "scenario": "Přesná 1:1 shoda se uloží jedním dropem a nabídne undo."
+    },
+    {
+      "id": "UI-06",
+      "scenario": "Částečný drop otevře editor s předvyplněnou minimální částkou."
+    },
+    {
+      "id": "UI-07",
+      "scenario": "Multi-select podporuje Ctrl/Shift a keyboard ekvivalent."
+    },
+    {
+      "id": "UI-08",
+      "scenario": "Pracovní výběr sbírá objekty z vyhledávání a sestav."
+    },
+    {
+      "id": "UI-09",
+      "scenario": "Kliknutí na spojovací čáru vybere konkrétní Allocation."
+    },
+    {
+      "id": "UI-10",
+      "scenario": "Vazby mají číselný ekvivalent a grafika se při větším počtu nezahltí."
+    },
+    {
+      "id": "UI-11",
+      "scenario": "Každý řádek má Další akce při hoveru i keyboard focus."
+    },
+    {
+      "id": "UI-12",
+      "scenario": "Pravé tlačítko, Shift+F10, detail a příkazová lišta používají stejný ActionRegistry."
+    },
+    {
+      "id": "UI-13",
+      "scenario": "Vyhledávání a živá sestava nabízí Otevřít v párování, ruční akce a audit."
+    },
+    {
+      "id": "UI-14",
+      "scenario": "Dashboardový seznam nejstarších rozdílů má plné objektové menu."
+    },
+    {
+      "id": "UI-15",
+      "scenario": "Zakázaná akce má tooltip s důvodem a dalším krokem."
+    },
+    {
+      "id": "UI-16",
+      "scenario": "Tooltip se zobrazí i při keyboard focus a neobsahuje tajné údaje."
+    },
+    {
+      "id": "UI-17",
+      "scenario": "Ctrl+F, Ctrl+R, Ctrl+Z, Ctrl+Y, Enter, F2, Delete a Esc fungují."
+    },
+    {
+      "id": "UI-18",
+      "scenario": "Focus je vždy viditelný a všechny scénáře jsou proveditelné bez myši."
+    },
+    {
+      "id": "UI-19",
+      "scenario": "UI je čitelné při 1280×720 a scalingu 100, 125, 150, 175 a 200 %."
+    },
+    {
+      "id": "UI-20",
+      "scenario": "Dlouhé UUID a reference jsou plně dostupné tooltipem a Kopírovat."
+    },
+    {
+      "id": "UI-21",
+      "scenario": "Prázdné, loading, error a success stavy mají lidský text a funkční akce."
+    },
+    {
+      "id": "UI-22",
+      "scenario": "Hlavní tlačítko Aktualizovat a spárovat provede celý pracovní tok."
+    },
+    {
+      "id": "DATA-01",
+      "scenario": "SQLite foreign keys a WAL jsou zapnuté."
+    },
+    {
+      "id": "DATA-02",
+      "scenario": "Peníze nejsou nikde počítané přes float."
+    },
+    {
+      "id": "DATA-03",
+      "scenario": "Natural keys mají UNIQUE constraints."
+    },
+    {
+      "id": "DATA-04",
+      "scenario": "Audit je append-only a before/after je dohledatelné."
+    },
+    {
+      "id": "DATA-05",
+      "scenario": "Před migrací vznikne backup a neúspěšná migrace se rollbackne."
+    },
+    {
+      "id": "DATA-06",
+      "scenario": "Integrity check proběhne při startu po nekorektním ukončení."
+    },
+    {
+      "id": "DATA-07",
+      "scenario": "Databázová chyba nezanechá poloviční command."
+    },
+    {
+      "id": "DATA-08",
+      "scenario": "Raw snapshoty jsou dostupné a citlivé údaje jsou v diagnostice redigované."
+    },
+    {
+      "id": "DATA-09",
+      "scenario": "Token se nevyskytuje v DB, logu, exportu ani crash reportu."
+    },
+    {
+      "id": "DATA-10",
+      "scenario": "Maskovaná karta zůstane maskovaná ve všech výstupech."
+    },
+    {
+      "id": "OPS-01",
+      "scenario": "API sync, import, matching, export a backup neblokují UI."
+    },
+    {
+      "id": "OPS-02",
+      "scenario": "Heartbeat dokládá responsivitu při 10 000 záznamech."
+    },
+    {
+      "id": "OPS-03",
+      "scenario": "Zrušení operace rollbackne nedokončenou atomickou dávku."
+    },
+    {
+      "id": "OPS-04",
+      "scenario": "Zavření progress dialogu operaci bezpečně minimalizuje nebo zruší."
+    },
+    {
+      "id": "OPS-05",
+      "scenario": "Log se rotuje přibližně po 5 000 řádcích."
+    },
+    {
+      "id": "OPS-06",
+      "scenario": "Diagnostický balíček neobsahuje tokeny ani celé osobní údaje."
+    },
+    {
+      "id": "OPS-07",
+      "scenario": "Export respektuje aktivní filtry a měnu v každém řádku."
+    },
+    {
+      "id": "BUILD-01",
+      "scenario": "Build je reprodukovatelný z čistého checkoutu."
+    },
+    {
+      "id": "BUILD-02",
+      "scenario": "Instalátor funguje per-user bez admin práv pro normální provoz."
+    },
+    {
+      "id": "BUILD-03",
+      "scenario": "Program se spustí na čistém Windows bez instalace Pythonu."
+    },
+    {
+      "id": "BUILD-04",
+      "scenario": "Odinstalace nepoškodí uživatelskou databázi bez výslovného rozhodnutí."
+    },
+    {
+      "id": "BUILD-05",
+      "scenario": "Release neobsahuje tokeny, demo data ani původní vstupní soubory."
+    },
+    {
+      "id": "BUILD-06",
+      "scenario": "CI provede lint, type check, testy, migrace, GUI smoke a Windows build."
+    },
+    {
+      "id": "INV-01",
+      "scenario": "Aplikace se spustí bez přihlášení, rolí a schvalovacího workflow a všechny validní funkce jsou dostupné jediné osobě."
+    },
+    {
+      "id": "INV-02",
+      "scenario": "Síťový trace a Windows služby prokáží, že neexistuje plánovač, sledování složek ani tichá synchronizace; síť se používá jen po vědomé akci uživatele."
+    },
+    {
+      "id": "INV-03",
+      "scenario": "Všechny provozní parametry lze nastavit v UI a běžný provoz nevyžaduje editaci souboru, registru, DB, env ani příkazové řádky."
+    },
+    {
+      "id": "INV-04",
+      "scenario": "Každá platná objektová akce je ve všech živých pohledech vytvořena stejným ActionRegistry ID, názvem, zkratkou, handlerem a auditním eventem."
+    },
+    {
+      "id": "INV-05",
+      "scenario": "Žádná nezbytná informace nebo akce není dostupná pouze hoverem; stejný obsah je dosažitelný focusem, menu nebo detailem."
+    },
+    {
+      "id": "INV-06",
+      "scenario": "Ručně spárovat, rozpojit, upravit, hotovost, jiný zdroj a ruční vyřešení nevyžadují heslo a každou akci lze bezpečně vrátit."
+    },
+    {
+      "id": "INV-07",
+      "scenario": "Vyrovnaný nejednoznačný případ lze potvrdit jako skupinu bez vytvoření libovolných párových alokací."
+    },
+    {
+      "id": "INV-08",
+      "scenario": "Změna zdrojových dat po ručním rozhodnutí zachová historii a vazby, ale přepne případ do stavu Vyžaduje kontrolu."
+    },
+    {
+      "id": "API-19",
+      "scenario": "Opakovaný cursor nebo cursor cyklus ukončí běh bezpečnou chybou; klient nikdy nevstoupí do nekonečné smyčky."
+    },
+    {
+      "id": "API-20",
+      "scenario": "Stejné externí ID vrácené na více stránkách je deduplikováno, započítáno v diagnostice a nevytvoří duplicitu."
+    },
+    {
+      "id": "API-21",
+      "scenario": "Null, nové pole, neznámá enum hodnota nebo změna datového typu nezpůsobí pád; raw snapshot se zachová a případ se diagnostikuje."
+    },
+    {
+      "id": "API-22",
+      "scenario": "Změna částky, měny, archived nebo print_format u již použitého dokladu označí všechny dotčené skupiny Vyžaduje kontrolu."
+    },
+    {
+      "id": "API-23",
+      "scenario": "Přerušený víceletý import lze po restartu obnovit od posledního dokončeného checkpointu bez ztráty nebo duplikace."
+    },
+    {
+      "id": "API-24",
+      "scenario": "UTC timestampy se ukládají beze změny a UI je správně zobrazuje v Europe/Prague včetně přechodu letního času."
+    },
+    {
+      "id": "API-25",
+      "scenario": "Currency integer v listu a string v detailu se normalizují na stejný ISO kód a document_uuid null nebo uuid prázdné nezpůsobí konflikt."
+    },
+    {
+      "id": "BOOK-14",
+      "scenario": "RFC 4180 quoted pole, čárka a zalomení řádku uvnitř hodnoty se načtou bez posunu sloupců."
+    },
+    {
+      "id": "BOOK-15",
+      "scenario": "Stejné Booking číslo může být v několika payout dávkách; řádky zůstanou oddělené a mohou společně pokrýt doklady."
+    },
+    {
+      "id": "BOOK-16",
+      "scenario": "Opravený Booking řádek, který už ovlivnil skupinu, nepřepíše historii a označí skupinu Vyžaduje kontrolu."
+    },
+    {
+      "id": "BOOK-17",
+      "scenario": "Import nejprve vytvoří hash a čte neměnný snapshot; původní soubor nikdy nezmění a dočasnou kopii po běhu uklidí."
+    },
+    {
+      "id": "BANK-15",
+      "scenario": "Pokud více viditelných listů odpovídá schématu, UI vyžádá výběr; žádný list se nezvolí náhodně."
+    },
+    {
+      "id": "BANK-16",
+      "scenario": "Import XLS/XLSX nespouští makra, vzorce, externí odkazy ani DDE a používá pouze bezpečně načtené hodnoty buněk."
+    },
+    {
+      "id": "BANK-17",
+      "scenario": "Oprava částky, měny nebo typu transakce se stejným terminal+SEQ vytvoří konflikt a dotčené skupiny Vyžaduje kontrolu."
+    },
+    {
+      "id": "BANK-18",
+      "scenario": "Nulová částka nebo neznámá měna se nepoužije k párování a skončí v karanténě s lidským důvodem."
+    },
+    {
+      "id": "MATCH-20",
+      "scenario": "Dvě stejně možné párové varianty se stejným souhrnem lze potvrdit jako AGGREGATE_MATCHED bez falešných Allocation řádků."
+    },
+    {
+      "id": "MATCH-21",
+      "scenario": "Najít možné protějšky umožní rozšířit okno 7→14→30→celé období; výsledek nad 7 dní se bez silné reference nepotvrdí automaticky."
+    },
+    {
+      "id": "MATCH-22",
+      "scenario": "Stejná vstupní data, nastavení a scope vytvoří stejné kandidáty, skóre, pořadí a tie-break bez ohledu na pořadí importu."
+    },
+    {
+      "id": "MATCH-23",
+      "scenario": "Booking score používá závazné váhy a tvrdé brány; card score používá závazné váhy a přesný test reprodukuje očekávané skóre."
+    },
+    {
+      "id": "MATCH-24",
+      "scenario": "Subset-sum má časový a kombinační limit, je zrušitelný a při ukončení nevytvoří žádnou částečnou vazbu."
+    },
+    {
+      "id": "MATCH-25",
+      "scenario": "Změna zdroje po auto-matchi nebo manual-matchi ponechá původní audit, vytvoří SourceRevisionAlert a zablokuje stav Hotovo do nového potvrzení."
+    },
+    {
+      "id": "MATCH-26",
+      "scenario": "Znovu otevřít ruční vyřešení vrátí rozdíl do pracovního stavu a lze je následně znovu potvrdit nebo vrátit přes undo/redo."
+    },
+    {
+      "id": "MATCH-27",
+      "scenario": "Ruční hotovost nebo jiný zdroj lze upravit a odebrat; saldo, stav a audit se okamžitě přepočítají."
+    },
+    {
+      "id": "MATCH-28",
+      "scenario": "Stejné Booking číslo u rozdílných interních skupin se bez dalšího důkazu automaticky nesloučí a zobrazí konflikt nebo kandidáty."
+    },
+    {
+      "id": "MATCH-29",
+      "scenario": "Kladná a záporná částka se párují jen při účetně kompatibilním směru; systém nikdy neobrátí znaménko dvakrát."
+    },
+    {
+      "id": "MATCH-30",
+      "scenario": "Přesný individuální rozpis a skupinové vyrovnání se v UI, datech, sestavě a auditu vždy jasně odlišují."
+    },
+    {
+      "id": "UI-23",
+      "scenario": "Drag-and-drop funguje zdroj→doklad i doklad→zdroj a oba směry vytvoří identický doménový command."
+    },
+    {
+      "id": "UI-24",
+      "scenario": "Drop na konkrétní položku vytvoří vazbu, drop na skupinu přidá člena a navrhne rozpis a drop na prázdné plátno vytvoří skupinu jen z platného smíšeného výběru."
+    },
+    {
+      "id": "UI-25",
+      "scenario": "Esc během drag, náhledu nebo editoru částky ukončí operaci bez změny databáze a vrátí focus na původní objekt."
+    },
+    {
+      "id": "UI-26",
+      "scenario": "Automatický konformanční test projde všechny object/view/action kombinace a ověří shodné pořadí menu, ID, text, tooltip, zkratku, handler a audit."
+    },
+    {
+      "id": "UI-27",
+      "scenario": "Splitter, šířky a pořadí sloupců, viditelnost sloupců, filtry a poslední pohled se po restartu obnoví a lze je resetovat."
+    },
+    {
+      "id": "UI-28",
+      "scenario": "Windows vysoký kontrast, scaling 200 %, omezení animací a screen reader zachovají text, focus, stav a všechny akce."
+    },
+    {
+      "id": "UI-29",
+      "scenario": "Po commitu, chybě, undo a redo se focus vrátí na logicky odpovídající objekt a neztratí se výběr bez důvodu."
+    },
+    {
+      "id": "UI-30",
+      "scenario": "Skupinové vyrovnání je označeno textem a ikonou a nevykresluje falešné spojovací čáry mezi jednotlivými položkami."
+    },
+    {
+      "id": "UI-31",
+      "scenario": "Stav Vyžaduje kontrolu zobrazuje banner, přesný seznam změněných polí a akce Znovu ověřit, Znovu otevřít a Historie."
+    },
+    {
+      "id": "UI-32",
+      "scenario": "Každé nastavení má lidský label, tooltip, typ, výchozí hodnotu, rozsah, inline validaci a souhrn chyb; neplatná konfigurace se atomicky neuloží."
+    },
+    {
+      "id": "DATA-11",
+      "scenario": "AGGREGATE MatchGroup používá samostatné členství dokladů a zdrojů a databáze nevyžaduje ani negeneruje párové Allocation."
+    },
+    {
+      "id": "DATA-12",
+      "scenario": "SourceRevisionAlert obsahuje starý a nový hash, změněná pole, dotčené skupiny, čas a způsob vyřešení."
+    },
+    {
+      "id": "DATA-13",
+      "scenario": "Změna verze parseru zachová původní i nové BookingReferenceExtraction a rozdílný výsledek vyžádá kontrolu."
+    },
+    {
+      "id": "DATA-14",
+      "scenario": "CSV/XLSX export neutralizuje hodnoty začínající =, +, - nebo @ tak, aby se v tabulkovém programu nespustil vzorec."
+    },
+    {
+      "id": "OPS-08",
+      "scenario": "Druhý současný hlavní běh se nespustí nad stejnými zdroji; je odmítnut nebo bezpečně zařazen do fronty s viditelným stavem."
+    },
+    {
+      "id": "OPS-09",
+      "scenario": "Po pádu nebo restartu aplikace se nedokončený běh zobrazí jako přerušený a uživatel může obnovit bezpečný checkpoint nebo běh zahodit."
+    },
+    {
+      "id": "OPS-10",
+      "scenario": "Aplikace neodesílá telemetrii a nekomunikuje s jinou sítí než Better Hotel API po vědomě spuštěné akci."
+    },
+    {
+      "id": "BUILD-07",
+      "scenario": "Python, PySide6, importní knihovny a balicí nástroje jsou verzově uzamčené; build používá jednu dokumentovanou patch verzi Pythonu."
+    },
+    {
+      "id": "BUILD-08",
+      "scenario": "Aktualizace aplikace zachová DB, tokeny, nastavení a view state; neúspěšná migrace obnoví předchozí funkční verzi a zálohu."
+    }
+  ],
+  "actions": [
+    {
+      "id": "OPEN_DETAIL",
+      "label": "Otevřít detail",
+      "tooltip": "Zobrazí všechny dostupné údaje, původ, vazby a historii této položky.",
+      "shortcut": "Enter"
+    },
+    {
+      "id": "OPEN_IN_MATCHING",
+      "label": "Otevřít v párování",
+      "tooltip": "Přejde na párovací plochu, vybere tuto položku a zobrazí možné protějšky.",
+      "shortcut": "Ctrl+Enter"
+    },
+    {
+      "id": "ADD_TO_TRAY",
+      "label": "Přidat do pracovního výběru",
+      "tooltip": "Ponechá položku ve spodní liště, abyste k ní mohli přidat další doklady nebo platby z jiného pohledu.",
+      "shortcut": "Ctrl+Space"
+    },
+    {
+      "id": "PAIR_SELECTED",
+      "label": "Spárovat vybrané",
+      "tooltip": "Otevře náhled společného párování vybraných dokladů a zdrojů.",
+      "shortcut": "Ctrl+M"
+    },
+    {
+      "id": "CREATE_GROUP",
+      "label": "Vytvořit vyrovnávací skupinu",
+      "tooltip": "Vytvoří pracovní skupinu z vybraných položek a před uložením ukáže součty a rozdíl.",
+      "shortcut": ""
+    },
+    {
+      "id": "SPLIT_SOURCE",
+      "label": "Rozdělit platbu",
+      "tooltip": "Rozdělí zbývající částku této platby mezi více dokladů.",
+      "shortcut": "F2"
+    },
+    {
+      "id": "SPLIT_DOCUMENT",
+      "label": "Rozdělit doklad",
+      "tooltip": "Umožní pokrýt tento doklad několika zdroji úhrad.",
+      "shortcut": "F2"
+    },
+    {
+      "id": "EDIT_ALLOCATION",
+      "label": "Upravit přiřazenou částku",
+      "tooltip": "Změní částku této konkrétní vazby a ukáže nové zůstatky.",
+      "shortcut": "F2"
+    },
+    {
+      "id": "REMOVE_ALLOCATION",
+      "label": "Rozpojit tuto vazbu",
+      "tooltip": "Odebere pouze vybrané spojení. Zdrojová data zůstanou beze změny a akci lze vrátit.",
+      "shortcut": "Delete"
+    },
+    {
+      "id": "REMOVE_GROUP",
+      "label": "Rozpojit celou skupinu",
+      "tooltip": "Odebere všechny aktivní vazby ve skupině po zobrazení dopadu.",
+      "shortcut": "Shift+Delete"
+    },
+    {
+      "id": "ACCEPT_CANDIDATE",
+      "label": "Potvrdit návrh",
+      "tooltip": "Převede navržené spojení na ručně potvrzené párování.",
+      "shortcut": "Ctrl+Enter"
+    },
+    {
+      "id": "REJECT_CANDIDATE",
+      "label": "Odmítnout návrh",
+      "tooltip": "Tento návrh se nebude znovu nabízet, dokud se nezmění data nebo pravidla.",
+      "shortcut": ""
+    },
+    {
+      "id": "MARK_CASH",
+      "label": "Doplnit jako hotovost",
+      "tooltip": "Předvyplní zbývající částku a uloží ji jako ručně potvrzenou hotovost.",
+      "shortcut": ""
+    },
+    {
+      "id": "MARK_OTHER",
+      "label": "Doplnit jiným zdrojem",
+      "tooltip": "Předvyplní zbývající částku a umožní pojmenovat jiný ruční zdroj.",
+      "shortcut": ""
+    },
+    {
+      "id": "MANUAL_RESOLVE",
+      "label": "Označit jako ručně vyřešené",
+      "tooltip": "Uzavře rozdíl bez vytváření fiktivní externí platby. Rozhodnutí bude viditelně označené a auditované.",
+      "shortcut": ""
+    },
+    {
+      "id": "MARK_DOCUMENT_PAID",
+      "label": "Označit doklad jako uhrazený bez důkazu",
+      "tooltip": "Označí tento doklad jako uhrazený ručním rozhodnutím bez spotřebování externího potvrzení.",
+      "shortcut": ""
+    },
+    {
+      "id": "CLEAR_DOCUMENT_MANUAL_PAID",
+      "label": "Zrušit ruční úhradu dokladu",
+      "tooltip": "Zruší ruční označení a vrátí doklad do výpočtu podle skutečných potvrzení.",
+      "shortcut": ""
+    },
+    {
+      "id": "INCLUDE",
+      "label": "Zahrnout do kontroly",
+      "tooltip": "Přidá doklad do kontrolované množiny bez změny dat v Better Hotelu.",
+      "shortcut": ""
+    },
+    {
+      "id": "EXCLUDE",
+      "label": "Vyřadit z kontroly",
+      "tooltip": "Přestane doklad zahrnovat do rozdílů. Zdrojový doklad se nesmaže.",
+      "shortcut": ""
+    },
+    {
+      "id": "SHOW_RELATIONS",
+      "label": "Zobrazit související položky",
+      "tooltip": "Ukáže rezervace, faktury, zdroje úhrad a skupiny navázané na tuto položku.",
+      "shortcut": ""
+    },
+    {
+      "id": "SHOW_AUDIT",
+      "label": "Zobrazit historii změn",
+      "tooltip": "Otevře časovou osu všech importů, automatických návrhů a ručních zásahů.",
+      "shortcut": ""
+    },
+    {
+      "id": "SHOW_SOURCE_ROW",
+      "label": "Zobrazit původní zdrojový řádek",
+      "tooltip": "Ukáže kanonizovaný řádek nebo API snapshot, ze kterého tato položka vznikla.",
+      "shortcut": ""
+    },
+    {
+      "id": "COPY_PRIMARY_ID",
+      "label": "Kopírovat hlavní identifikátor",
+      "tooltip": "Zkopíruje číslo dokladu, Booking.com číslo nebo SEQ ID podle typu položky.",
+      "shortcut": "Ctrl+C"
+    },
+    {
+      "id": "COPY_ALL_IDS",
+      "label": "Kopírovat všechny identifikátory",
+      "tooltip": "Zkopíruje přehled všech dostupných technických identifikátorů.",
+      "shortcut": "Ctrl+Shift+C"
+    },
+    {
+      "id": "EXPORT_SELECTION",
+      "label": "Exportovat vybrané",
+      "tooltip": "Vytvoří export pouze z vybraných položek se zachováním měny a aktivních filtrů.",
+      "shortcut": ""
+    },
+    {
+      "id": "UNDO",
+      "label": "Vrátit: <poslední akce>",
+      "tooltip": "Provede bezpečný kompenzační příkaz a zachová auditní historii.",
+      "shortcut": "Ctrl+Z"
+    },
+    {
+      "id": "REDO",
+      "label": "Znovu: <vrácená akce>",
+      "tooltip": "Znovu provede naposledy vrácenou akci, pokud je stále bezpečná.",
+      "shortcut": "Ctrl+Y"
+    },
+    {
+      "id": "RETRY_RUN",
+      "label": "Zopakovat běh",
+      "tooltip": "Znovu spustí stejný import nebo synchronizační rozsah s aktuálním nastavením.",
+      "shortcut": ""
+    },
+    {
+      "id": "OPEN_QUARANTINE",
+      "label": "Otevřít karanténu",
+      "tooltip": "Zobrazí řádky, které nebylo možné bezpečně importovat.",
+      "shortcut": ""
+    },
+    {
+      "id": "RESOLVE_QUARANTINE",
+      "label": "Vyřešit řádek",
+      "tooltip": "Umožní zvolit význam neznámé hodnoty nebo řádek vědomě ignorovat a znovu zpracovat.",
+      "shortcut": ""
+    },
+    {
+      "id": "REFRESH_OBJECT",
+      "label": "Načíst aktuální stav z API",
+      "tooltip": "Provede jeden bezpečný GET a aktualizuje tento objekt bez změny Better Hotelu.",
+      "shortcut": ""
+    },
+    {
+      "id": "FIND_COUNTERPARTS",
+      "label": "Najít možné protějšky",
+      "tooltip": "Vyhledá možné doklady nebo zdroje podle měny, částky, reference a data a vysvětlí pořadí výsledků.",
+      "shortcut": "Ctrl+Shift+F"
+    },
+    {
+      "id": "EXPAND_SEARCH_WINDOW",
+      "label": "Rozšířit hledání v čase",
+      "tooltip": "Rozšíří hledání na 14 dní, 30 dní nebo celé období. Vzdálené výsledky zůstanou návrhy k potvrzení.",
+      "shortcut": ""
+    },
+    {
+      "id": "BALANCE_AS_GROUP",
+      "label": "Vyrovnat skupinu jako celek",
+      "tooltip": "Potvrdí souhrnnou rovnost vybraných dokladů a zdrojů bez vytvoření neprokázaných vazeb mezi jednotlivými položkami.",
+      "shortcut": ""
+    },
+    {
+      "id": "REVALIDATE_GROUP",
+      "label": "Znovu ověřit skupinu",
+      "tooltip": "Přepočítá skupinu z aktuálních zdrojových dat a ukáže všechny změny před potvrzením.",
+      "shortcut": ""
+    },
+    {
+      "id": "EDIT_MANUAL_SETTLEMENT",
+      "label": "Upravit ruční zdroj",
+      "tooltip": "Změní částku, typ nebo popis ruční hotovosti či jiného zdroje a okamžitě přepočítá rozdíl.",
+      "shortcut": "F2"
+    },
+    {
+      "id": "REMOVE_MANUAL_SETTLEMENT",
+      "label": "Odebrat ruční zdroj",
+      "tooltip": "Vrátí ruční hotovost nebo jiný zdroj, zachová audit a nabídne možnost změnu vrátit.",
+      "shortcut": "Delete"
+    },
+    {
+      "id": "REOPEN_MANUAL_RESOLUTION",
+      "label": "Znovu otevřít ruční vyřešení",
+      "tooltip": "Vrátí případ do pracovního stavu, aby bylo možné upravit nebo doplnit důkazy a vazby.",
+      "shortcut": ""
+    },
+    {
+      "id": "REMOVE_FROM_TRAY",
+      "label": "Odebrat z pracovního výběru",
+      "tooltip": "Odebere pouze tuto položku ze spodní pracovní lišty; žádné párování se nezmění.",
+      "shortcut": ""
+    },
+    {
+      "id": "CLEAR_TRAY",
+      "label": "Vyprázdnit pracovní výběr",
+      "tooltip": "Odebere všechny položky z pracovního výběru bez změny zdrojových dat nebo vazeb.",
+      "shortcut": ""
+    }
+  ],
+  "ui_components": [
+    {
+      "id": "APP_WINDOW",
+      "human_name": "Hlavní okno",
+      "view": "Shell",
+      "primary_function": "Navigace, obnovení rozložení, ukončení",
+      "states": "normal/focus/busy/error"
+    },
+    {
+      "id": "NAV_DASH",
+      "human_name": "Dashboard",
+      "view": "Navigace",
+      "primary_function": "Otevřít Dashboard",
+      "states": "normal/active/focus"
+    },
+    {
+      "id": "NAV_MATCH",
+      "human_name": "Párování",
+      "view": "Navigace",
+      "primary_function": "Otevřít Párování",
+      "states": "normal/active/focus"
+    },
+    {
+      "id": "NAV_SEARCH",
+      "human_name": "Vyhledávání",
+      "view": "Navigace",
+      "primary_function": "Otevřít Vyhledávání",
+      "states": "normal/active/focus"
+    },
+    {
+      "id": "NAV_IMPORT",
+      "human_name": "Importy a synchronizace",
+      "view": "Navigace",
+      "primary_function": "Otevřít Importy",
+      "states": "normal/active/focus"
+    },
+    {
+      "id": "NAV_REPORT",
+      "human_name": "Sestavy",
+      "view": "Navigace",
+      "primary_function": "Otevřít Sestavy",
+      "states": "normal/active/focus"
+    },
+    {
+      "id": "NAV_AUDIT",
+      "human_name": "Auditní historie",
+      "view": "Navigace",
+      "primary_function": "Otevřít Audit",
+      "states": "normal/active/focus"
+    },
+    {
+      "id": "NAV_SETTINGS",
+      "human_name": "Nastavení",
+      "view": "Navigace",
+      "primary_function": "Otevřít Nastavení",
+      "states": "normal/active/focus"
+    },
+    {
+      "id": "TOP_GLOBAL_SEARCH",
+      "human_name": "Hledat v KájovoKarty",
+      "view": "Horní lišta",
+      "primary_function": "Hledat, otevřít výsledek",
+      "states": "empty/typing/results/error"
+    },
+    {
+      "id": "TOP_SOURCE_STATUS",
+      "human_name": "Stav zdrojů",
+      "view": "Horní lišta",
+      "primary_function": "Otevřít stav zdrojů",
+      "states": "fresh/stale/error"
+    },
+    {
+      "id": "TOP_LAST_RUN",
+      "human_name": "Poslední běh",
+      "view": "Horní lišta",
+      "primary_function": "Otevřít detail běhu",
+      "states": "success/warning/error"
+    },
+    {
+      "id": "TOP_RUN_ALL",
+      "human_name": "Aktualizovat a spárovat",
+      "view": "Horní lišta",
+      "primary_function": "Spustit celý workflow",
+      "states": "ready/running/cancelling/error"
+    },
+    {
+      "id": "TOP_OPERATION_CENTER",
+      "human_name": "Centrum operací",
+      "view": "Horní lišta",
+      "primary_function": "Otevřít průběh a zrušit",
+      "states": "idle/running/failed/completed"
+    },
+    {
+      "id": "GLOBAL_SELECTION_TRAY",
+      "human_name": "Pracovní výběr",
+      "view": "Spodní lišta",
+      "primary_function": "Přidat, odebrat, otevřít v párování",
+      "states": "collapsed/open/mixed-currency"
+    },
+    {
+      "id": "DASH_CZK",
+      "human_name": "Přehled CZK",
+      "view": "Dashboard",
+      "primary_function": "Drill-down KPI",
+      "states": "loading/ready/empty/error"
+    },
+    {
+      "id": "DASH_EUR",
+      "human_name": "Přehled EUR",
+      "view": "Dashboard",
+      "primary_function": "Drill-down KPI",
+      "states": "loading/ready/empty/error"
+    },
+    {
+      "id": "DASH_AGING",
+      "human_name": "Stáří rozdílů",
+      "view": "Dashboard",
+      "primary_function": "Filtrovat podle stáří",
+      "states": "ready/empty"
+    },
+    {
+      "id": "DASH_OLDEST",
+      "human_name": "Nejstarší rozdíly",
+      "view": "Dashboard",
+      "primary_function": "Objektové akce",
+      "states": "ready/empty"
+    },
+    {
+      "id": "DASH_LARGEST",
+      "human_name": "Největší rozdíly",
+      "view": "Dashboard",
+      "primary_function": "Objektové akce",
+      "states": "ready/empty"
+    },
+    {
+      "id": "DASH_FRESHNESS",
+      "human_name": "Aktuálnost zdrojů",
+      "view": "Dashboard",
+      "primary_function": "Otevřít zdrojový běh",
+      "states": "fresh/stale/error"
+    },
+    {
+      "id": "MATCH_STATUS_TABS",
+      "human_name": "Stavové záložky",
+      "view": "Párování",
+      "primary_function": "Filtrovat stav",
+      "states": "active/inactive"
+    },
+    {
+      "id": "MATCH_FILTER_BAR",
+      "human_name": "Filtry párování",
+      "view": "Párování",
+      "primary_function": "Filtrovat/vymazat",
+      "states": "clean/filtered/invalid"
+    },
+    {
+      "id": "MATCH_DOC_TABLE",
+      "human_name": "Doklady k vyřešení",
+      "view": "Párování",
+      "primary_function": "Výběr, drag, objektové akce",
+      "states": "loading/ready/empty/error"
+    },
+    {
+      "id": "MATCH_DOC_ACTIONS",
+      "human_name": "Akce dokladu",
+      "view": "Párování",
+      "primary_function": "ActionRegistry",
+      "states": "enabled/disabled/reason"
+    },
+    {
+      "id": "MATCH_CANVAS",
+      "human_name": "Vyrovnávací skupiny",
+      "view": "Párování",
+      "primary_function": "Drop, výběr skupiny a vazby",
+      "states": "empty/ready/drag-target/error"
+    },
+    {
+      "id": "MATCH_GROUP_CARD",
+      "human_name": "Vyrovnávací skupina",
+      "view": "Párování",
+      "primary_function": "Upravit, vyřešit, rozpojit",
+      "states": "balanced/partial/conflict/manual"
+    },
+    {
+      "id": "MATCH_CONNECTOR",
+      "human_name": "Vazba s částkou",
+      "view": "Párování",
+      "primary_function": "Vybrat, editovat, rozpojit",
+      "states": "normal/hover/selected/conflict"
+    },
+    {
+      "id": "MATCH_SOURCE_TABLE",
+      "human_name": "Zdroje úhrad",
+      "view": "Párování",
+      "primary_function": "Výběr, drag, objektové akce",
+      "states": "loading/ready/empty/error"
+    },
+    {
+      "id": "MATCH_SOURCE_TABS",
+      "human_name": "Typ zdroje",
+      "view": "Párování",
+      "primary_function": "Vše/Booking/Karty/Ruční",
+      "states": "active/inactive"
+    },
+    {
+      "id": "MATCH_CONTEXT_BAR",
+      "human_name": "Příkazová lišta výběru",
+      "view": "Párování",
+      "primary_function": "Spárovat, rozdělit, vyřešit",
+      "states": "hidden/visible/disabled"
+    },
+    {
+      "id": "MATCH_DRAG_GHOST",
+      "human_name": "Náhled tažených položek",
+      "view": "Párování",
+      "primary_function": "Informace o výběru",
+      "states": "single/multi/mixed-currency"
+    },
+    {
+      "id": "MATCH_DROP_PREVIEW",
+      "human_name": "Náhled dopadu",
+      "view": "Párování",
+      "primary_function": "Přesná/částečná/zakázaná vazba",
+      "states": "allowed/partial/blocked/conflict"
+    },
+    {
+      "id": "MATCH_ALLOC_POPOVER",
+      "human_name": "Editor přiřazené částky",
+      "view": "Párování",
+      "primary_function": "Potvrdit/zrušit/rozdělit",
+      "states": "valid/invalid/conflict"
+    },
+    {
+      "id": "MATCH_CANDIDATE_PANEL",
+      "human_name": "Návrh párování",
+      "view": "Párování",
+      "primary_function": "Potvrdit/odmítnout/porovnat",
+      "states": "ready/accepted/rejected"
+    },
+    {
+      "id": "MATCH_SCORE_DETAIL",
+      "human_name": "Vysvětlení jistoty",
+      "view": "Párování",
+      "primary_function": "Zobrazit důkazy",
+      "states": "collapsed/open"
+    },
+    {
+      "id": "MATCH_MANUAL_SETTLEMENT",
+      "human_name": "Ruční doplnění",
+      "view": "Párování",
+      "primary_function": "Hotovost/jiný zdroj/resolve",
+      "states": "valid/invalid"
+    },
+    {
+      "id": "MATCH_UNDO",
+      "human_name": "Vrátit poslední změnu",
+      "view": "Párování",
+      "primary_function": "Undo",
+      "states": "enabled/disabled/reason"
+    },
+    {
+      "id": "MATCH_REDO",
+      "human_name": "Znovu provést",
+      "view": "Párování",
+      "primary_function": "Redo",
+      "states": "enabled/disabled/reason"
+    },
+    {
+      "id": "MATCH_DETAIL_DRAWER",
+      "human_name": "Detail a historie",
+      "view": "Párování",
+      "primary_function": "Vazby, zdroj, audit, kopírování",
+      "states": "closed/open/loading/error"
+    },
+    {
+      "id": "SEARCH_INPUT",
+      "human_name": "Vyhledat doklad, rezervaci nebo platbu",
+      "view": "Vyhledávání",
+      "primary_function": "Hledat",
+      "states": "empty/typing/results/error"
+    },
+    {
+      "id": "SEARCH_FILTERS",
+      "human_name": "Filtry vyhledávání",
+      "view": "Vyhledávání",
+      "primary_function": "Omezit výsledky",
+      "states": "clean/filtered"
+    },
+    {
+      "id": "SEARCH_RESULTS",
+      "human_name": "Výsledky",
+      "view": "Vyhledávání",
+      "primary_function": "Objektové akce a multiselect",
+      "states": "loading/ready/empty/error"
+    },
+    {
+      "id": "SEARCH_RELATIONS",
+      "human_name": "Související položky",
+      "view": "Vyhledávání",
+      "primary_function": "Obousměrná navigace",
+      "states": "loading/ready/empty"
+    },
+    {
+      "id": "IMPORT_API_CARD",
+      "human_name": "Better Hotel",
+      "view": "Importy",
+      "primary_function": "Stáhnout, test, detail běhu",
+      "states": "ready/running/error"
+    },
+    {
+      "id": "IMPORT_BOOKING_DROP",
+      "human_name": "Importovat Booking.com CSV",
+      "view": "Importy",
+      "primary_function": "Výběr/drop souborů",
+      "states": "empty/validating/queued/error"
+    },
+    {
+      "id": "IMPORT_BANK_DROP",
+      "human_name": "Importovat bankovní soubor",
+      "view": "Importy",
+      "primary_function": "Výběr/drop CSV/XLS/XLSX",
+      "states": "empty/validating/queued/error"
+    },
+    {
+      "id": "IMPORT_QUEUE",
+      "human_name": "Fronta souborů",
+      "view": "Importy",
+      "primary_function": "Odebrat/spustit",
+      "states": "empty/queued/running"
+    },
+    {
+      "id": "IMPORT_RUNS",
+      "human_name": "Historie běhů",
+      "view": "Importy",
+      "primary_function": "Detail/retry/objekty",
+      "states": "loading/ready/empty"
+    },
+    {
+      "id": "IMPORT_RUN_DETAIL",
+      "human_name": "Detail běhu",
+      "view": "Importy",
+      "primary_function": "Počty, součty, chyby",
+      "states": "loading/ready/error"
+    },
+    {
+      "id": "IMPORT_QUARANTINE",
+      "human_name": "Karanténa",
+      "view": "Importy",
+      "primary_function": "Vyřešit, mapovat, ignorovat",
+      "states": "empty/ready/error"
+    },
+    {
+      "id": "IMPORT_TYPE_MAPPING",
+      "human_name": "Význam neznámé hodnoty",
+      "view": "Importy",
+      "primary_function": "Uložit mapování a znovu zpracovat",
+      "states": "valid/invalid"
+    },
+    {
+      "id": "REPORT_SELECTOR",
+      "human_name": "Typ sestavy",
+      "view": "Sestavy",
+      "primary_function": "Zvolit sestavu",
+      "states": "ready"
+    },
+    {
+      "id": "REPORT_FILTERS",
+      "human_name": "Filtry sestavy",
+      "view": "Sestavy",
+      "primary_function": "Filtrovat/uložit filtr",
+      "states": "clean/filtered"
+    },
+    {
+      "id": "REPORT_TABLE",
+      "human_name": "Živá sestava",
+      "view": "Sestavy",
+      "primary_function": "Objektové akce, třídění",
+      "states": "loading/ready/empty/error"
+    },
+    {
+      "id": "REPORT_EXPORT",
+      "human_name": "Exportovat",
+      "view": "Sestavy",
+      "primary_function": "CSV/XLSX/PDF",
+      "states": "ready/running/error"
+    },
+    {
+      "id": "AUDIT_FILTERS",
+      "human_name": "Filtry auditu",
+      "view": "Audit",
+      "primary_function": "Filtrovat události",
+      "states": "clean/filtered"
+    },
+    {
+      "id": "AUDIT_TIMELINE",
+      "human_name": "Časová osa změn",
+      "view": "Audit",
+      "primary_function": "Vybrat událost",
+      "states": "loading/ready/empty/error"
+    },
+    {
+      "id": "AUDIT_BEFORE_AFTER",
+      "human_name": "Před a po",
+      "view": "Audit",
+      "primary_function": "Porovnat stav",
+      "states": "ready/empty"
+    },
+    {
+      "id": "AUDIT_OPEN_CURRENT",
+      "human_name": "Otevřít aktuální stav",
+      "view": "Audit",
+      "primary_function": "Navigace na živý objekt",
+      "states": "enabled/disabled"
+    },
+    {
+      "id": "AUDIT_UNDO",
+      "human_name": "Vrátit tuto změnu",
+      "view": "Audit",
+      "primary_function": "Kompenzační command",
+      "states": "enabled/disabled/reason"
+    },
+    {
+      "id": "SET_API",
+      "human_name": "Připojení Better Hotel",
+      "view": "Nastavení",
+      "primary_function": "Tokeny/test",
+      "states": "untested/testing/valid/error"
+    },
+    {
+      "id": "SET_SYNC",
+      "human_name": "Synchronizace",
+      "view": "Nastavení",
+      "primary_function": "Období/blok/overlap/retry",
+      "states": "clean/dirty/invalid"
+    },
+    {
+      "id": "SET_MATCH",
+      "human_name": "Pravidla párování",
+      "view": "Nastavení",
+      "primary_function": "Tolerance/skóre/kombinace",
+      "states": "clean/dirty/invalid"
+    },
+    {
+      "id": "SET_IMPORT",
+      "human_name": "Importní pravidla",
+      "view": "Nastavení",
+      "primary_function": "Složky/status/type mapping",
+      "states": "clean/dirty/invalid"
+    },
+    {
+      "id": "SET_DATA",
+      "human_name": "Data a zálohy",
+      "view": "Nastavení",
+      "primary_function": "Složky/retence/backup/restore",
+      "states": "clean/dirty/running/error"
+    },
+    {
+      "id": "SET_UI",
+      "human_name": "Rozhraní",
+      "view": "Nastavení",
+      "primary_function": "Layout/sloupce/text",
+      "states": "clean/dirty"
+    },
+    {
+      "id": "GLOBAL_OBJECT_MENU",
+      "human_name": "Další akce",
+      "view": "Globální",
+      "primary_function": "ObjectActionRegistry",
+      "states": "enabled/disabled/reason"
+    },
+    {
+      "id": "GLOBAL_TOOLTIP",
+      "human_name": "Kontextová nápověda",
+      "view": "Globální",
+      "primary_function": "Hover/focus vysvětlení",
+      "states": "hidden/visible"
+    },
+    {
+      "id": "GLOBAL_TOAST",
+      "human_name": "Oznámení",
+      "view": "Globální",
+      "primary_function": "Výsledek a Undo",
+      "states": "info/success/warning/error"
+    },
+    {
+      "id": "GLOBAL_ERROR_DIALOG",
+      "human_name": "Chyba",
+      "view": "Globální",
+      "primary_function": "Náprava/retry/detail",
+      "states": "blocking/nonblocking"
+    },
+    {
+      "id": "GLOBAL_PROGRESS",
+      "human_name": "Průběh operace",
+      "view": "Globální",
+      "primary_function": "Minimalizovat/zrušit",
+      "states": "running/cancelling/completed/failed"
+    },
+    {
+      "id": "MATCH_COUNTERPARTS_PANEL",
+      "human_name": "Možné protějšky",
+      "view": "Párování / detail",
+      "primary_function": "Seřadit kandidáty, vysvětlit důvody, přidat do výběru",
+      "states": "loading/ready/empty/expanded-window"
+    },
+    {
+      "id": "MATCH_DATE_WINDOW_CONTROL",
+      "human_name": "Rozsah hledání",
+      "view": "Párování",
+      "primary_function": "7 dní / 14 dní / 30 dní / celé období",
+      "states": "default/expanded/all-history"
+    },
+    {
+      "id": "MATCH_AGGREGATE_RECONCILIATION",
+      "human_name": "Skupinové vyrovnání",
+      "view": "Párování",
+      "primary_function": "Vyrovnat jako celek bez falešného rozpisu",
+      "states": "preview/balanced/confirmed/reopened"
+    },
+    {
+      "id": "MATCH_REVIEW_BANNER",
+      "human_name": "Změna zdrojových dat",
+      "view": "Párování / detail",
+      "primary_function": "Ukázat změny, znovu ověřit, ponechat rozhodnutí",
+      "states": "hidden/review-required/resolved"
+    },
+    {
+      "id": "SETTINGS_VALIDATION_SUMMARY",
+      "human_name": "Kontrola nastavení",
+      "view": "Nastavení",
+      "primary_function": "Souhrn chybných hodnot a přechod na pole",
+      "states": "hidden/invalid/valid"
+    }
+  ]
+}

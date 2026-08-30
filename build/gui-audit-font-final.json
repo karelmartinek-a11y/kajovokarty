@@ -1,0 +1,1134 @@
+{
+  "status": "FAIL",
+  "platform": "nt",
+  "qt_scale_factor": "1.25",
+  "window_size": [
+    1440,
+    900
+  ],
+  "pages": [
+    {
+      "name": "DashboardScreen",
+      "visible_widgets": 77
+    },
+    {
+      "name": "MatchingScreen",
+      "visible_widgets": 72
+    },
+    {
+      "name": "SearchScreen",
+      "visible_widgets": 32
+    },
+    {
+      "name": "ImportsScreen",
+      "visible_widgets": 34
+    },
+    {
+      "name": "ReportsScreen",
+      "visible_widgets": 18
+    },
+    {
+      "name": "AuditScreen",
+      "visible_widgets": 33
+    },
+    {
+      "name": "SettingsScreen",
+      "visible_widgets": 177
+    }
+  ],
+  "failures": [
+    {
+      "page": "DashboardScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "MATCH_CONTEXT_BAR",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "QHeaderView",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "qt_scrollarea_viewport",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "QAbstractButton",
+      "reason": "nulová velikost"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "AuditScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "AuditScreen",
+      "widget": "QHeaderView",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "AuditScreen",
+      "widget": "QAbstractButton",
+      "reason": "interaktivní prvek není dosažitelný focusem"
+    },
+    {
+      "page": "SettingsScreen",
+      "widget": "Dočasně zobrazit tokeny",
+      "reason": "kontrast tlačítka je pouze 1.28:1"
+    },
+    {
+      "page": "SettingsScreen",
+      "widget": "QCheckBox",
+      "reason": "kontrast tlačítka je pouze 1.28:1"
+    },
+    {
+      "page": "SettingsScreen",
+      "widget": "QCheckBox",
+      "reason": "kontrast tlačítka je pouze 1.28:1"
+    },
+    {
+      "page": "SettingsScreen",
+      "widget": "QCheckBox",
+      "reason": "kontrast tlačítka je pouze 1.28:1"
+    },
+    {
+      "page": "SettingsScreen",
+      "widget": "QCheckBox",
+      "reason": "kontrast tlačítka je pouze 1.28:1"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QSpinBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QSpinBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QSpinBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "SET_IMPORT",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QCheckBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QSpinBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QComboBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLineEdit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLineEdit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "SET_DATA",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QSpinBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QSpinBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLineEdit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLineEdit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLineEdit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QCheckBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QSpinBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "SET_UI",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QComboBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QSpinBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "qt_spinbox_lineedit",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QCheckBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QLabel",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QWidget",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QCheckBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "SETTINGS_VALIDATION_SUMMARY",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QGroupBox",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    },
+    {
+      "page": "shell",
+      "widget": "QPushButton",
+      "reason": "viditelný prvek je mimo klientskou oblast"
+    }
+  ],
+  "warnings": [
+    {
+      "page": "DashboardScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QLineEdit",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "DashboardScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QLineEdit",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "MatchingScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QLineEdit",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "SearchScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "ImportsScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "ReportsScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "AuditScreen",
+      "widget": "QLineEdit",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "AuditScreen",
+      "widget": "QComboBox",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "AuditScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "AuditScreen",
+      "widget": "QHeaderView",
+      "reason": "chybí accessibleName nebo viditelný text"
+    },
+    {
+      "page": "AuditScreen",
+      "widget": "QAbstractButton",
+      "reason": "chybí accessibleName nebo viditelný text"
+    }
+  ],
+  "screenshot": "build\\gui-audit-font-final.png"
+}

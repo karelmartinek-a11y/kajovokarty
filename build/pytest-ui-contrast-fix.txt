@@ -1,0 +1,80 @@
+........................................................................ [ 59%]
+.................................................                        [100%]
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.13.5-final-0 ________________
+
+Name                                                      Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------------
+src/kajovokarty/__init__.py                                   3      0   100%
+src/kajovokarty/__main__.py                                  50     50     0%   1-59
+src/kajovokarty/app/__init__.py                               0      0   100%
+src/kajovokarty/app/config.py                                42      2    95%   89, 93
+src/kajovokarty/app/container.py                             77     77     0%   1-108
+src/kajovokarty/app/paths.py                                 79     27    66%   33, 41, 45, 49-70, 100-101, 103-104
+src/kajovokarty/app/preflight.py                             55     55     0%   1-64
+src/kajovokarty/application/__init__.py                       0      0   100%
+src/kajovokarty/application/audit.py                         23      0   100%
+src/kajovokarty/application/backup.py                        74     29    61%   48-61, 64-68, 71-78, 85, 90
+src/kajovokarty/application/counterparts.py                 160     61    62%   54-58, 94-123, 129, 139, 157, 161-183, 196, 198, 208-218, 228-231, 233, 255, 261, 263, 265, 269-273, 277-280
+src/kajovokarty/application/data_location.py                 68      8    88%   46, 56-57, 91, 94-96, 109
+src/kajovokarty/application/import_preflight.py              75      2    97%   133, 135
+src/kajovokarty/application/operations.py                   182     28    85%   59, 62, 65, 85, 123, 137-138, 154, 158-159, 167-168, 177, 180-184, 187, 235, 239, 252-253, 259-260, 263-264, 282, 285
+src/kajovokarty/application/pairing.py                      792    182    77%   61, 72, 85, 87, 91, 120, 139, 145, 147, 152, 190, 204, 223, 225, 231, 233, 246, 252, 274, 320, 326, 330, 341, 347, 350, 353, 362, 368, 371, 374, 382, 396, 402, 444, 448, 451, 469, 472, 488-500, 513, 515, 522, 524, 526, 538, 553-574, 577-587, 595, 597, 611, 613, 635, 637, 702, 722-737, 745, 753-763, 769, 771, 787, 815-819, 823, 826-836, 839-856, 879, 934, 937, 975, 981, 983, 985, 1001, 1034, 1044, 1046, 1058, 1060, 1089, 1109, 1118, 1120, 1127, 1129, 1162
+src/kajovokarty/application/quarantine.py                   133     17    87%   53-54, 57-61, 67, 70, 75, 150, 153-154, 172, 181, 201, 230
+src/kajovokarty/application/reconciliation.py               125     77    38%   37, 45-117, 120-130, 133-138, 156-158, 168-171, 181, 185-187
+src/kajovokarty/application/reference_resolution.py          81     14    83%   42, 48, 82-87, 150, 155, 185-194
+src/kajovokarty/application/reporting.py                     73     73     0%   1-103
+src/kajovokarty/application/saved_filters.py                 61      6    90%   44-45, 47, 64, 68, 101
+src/kajovokarty/application/search.py                       147     27    82%   69, 84, 284-285, 296, 299, 306-308, 320-332, 357, 372-385, 393-397, 410-413, 417, 431-436, 472
+src/kajovokarty/application/settings.py                     111     87    22%   17-18, 23-24, 27-30, 33-36, 39-52, 55-66, 78-109, 113-123, 127-137
+src/kajovokarty/application/view_state.py                    23      0   100%
+src/kajovokarty/domain/__init__.py                            0      0   100%
+src/kajovokarty/domain/entities.py                          184      8    96%   30-32, 69, 73, 100, 104, 120
+src/kajovokarty/domain/enums.py                              43      0   100%
+src/kajovokarty/domain/matching.py                          193     14    93%   38, 40, 42, 44, 46, 48, 50, 174, 186, 215-216, 218, 256, 289
+src/kajovokarty/domain/money.py                              82     18    78%   21, 28, 30, 34, 36, 39, 45-48, 53-54, 80, 84, 96, 99-100, 103, 106
+src/kajovokarty/domain/reference_parser.py                   59      0   100%
+src/kajovokarty/infrastructure/__init__.py                    0      0   100%
+src/kajovokarty/infrastructure/better_hotel/__init__.py       0      0   100%
+src/kajovokarty/infrastructure/better_hotel/client.py       206     49    76%   58, 74-75, 92, 94, 96, 131, 137, 141, 153-164, 169, 175-179, 186-187, 189, 212, 216, 236, 243-244, 247-248, 252, 256-260, 265, 268-269, 275-276, 282
+src/kajovokarty/infrastructure/better_hotel/dto.py          150     33    78%   29, 32, 35-36, 51, 55, 61, 63, 65, 69-75, 80, 83-84, 91-94, 99, 128, 177, 180, 183, 207, 209, 213-215
+src/kajovokarty/infrastructure/better_hotel/sync.py         547     88    84%   75, 77, 99, 105, 111, 119-122, 143, 156, 175, 190-197, 205, 257, 261-267, 286, 290-296, 300, 313, 347-348, 360-364, 387-388, 394-397, 402, 431-432, 443-446, 453, 462, 470, 499, 616-617, 621-623, 645-649, 683-700, 707, 712-714, 747, 751-753, 776, 780-782, 803-807, 901-907, 961, 967, 987, 998-1000, 1006-1007, 1012
+src/kajovokarty/infrastructure/diagnostics/__init__.py        0      0   100%
+src/kajovokarty/infrastructure/diagnostics/bundle.py         58     58     0%   1-74
+src/kajovokarty/infrastructure/diagnostics/logging.py        99     19    81%   29, 56-65, 91-93, 96-97, 109, 125, 132
+src/kajovokarty/infrastructure/importers/__init__.py          0      0   100%
+src/kajovokarty/infrastructure/importers/bank_file.py       285     62    78%   102-103, 182-189, 208-209, 244, 249-250, 255-256, 277-291, 299-302, 304, 306, 317, 336, 338, 340, 349-350, 356, 359, 361, 395, 419-428, 487-498
+src/kajovokarty/infrastructure/importers/booking_csv.py     220     41    81%   134-141, 148, 153-154, 159-160, 176-177, 198-199, 204, 209-210, 218, 220, 258-279, 285-291, 295-297, 336
+src/kajovokarty/infrastructure/importers/common.py          138     32    77%   77-78, 98-100, 102, 104, 113, 118, 121-122, 127-129, 131, 133, 143-145, 168, 175-177, 189, 201-202, 207, 212, 216-219
+src/kajovokarty/infrastructure/persistence/__init__.py        0      0   100%
+src/kajovokarty/infrastructure/persistence/database.py      178     15    92%   76, 79, 93, 124, 133, 159, 177-189, 192, 234
+src/kajovokarty/infrastructure/security/__init__.py           0      0   100%
+src/kajovokarty/infrastructure/security/secrets.py          100     41    59%   31, 61, 64-65, 69, 73, 78, 81, 97-99, 103-119, 123-141
+src/kajovokarty/ui/__init__.py                                0      0   100%
+src/kajovokarty/ui/action_registry.py                       139    139     0%   1-199
+src/kajovokarty/ui/allocation_plan.py                        11     11     0%   1-22
+src/kajovokarty/ui/common.py                                 67     67     0%   1-78
+src/kajovokarty/ui/component_registry.py                    108     14    87%   178-188, 192, 197, 199
+src/kajovokarty/ui/counterparts_dialog.py                   109    109     0%   1-193
+src/kajovokarty/ui/main_window.py                           860    860     0%   1-1131
+src/kajovokarty/ui/models.py                                333    333     0%   1-438
+src/kajovokarty/ui/money_dialog.py                           64     64     0%   1-106
+src/kajovokarty/ui/operation_progress.py                     85     85     0%   1-109
+src/kajovokarty/ui/quarantine_dialog.py                     151    151     0%   1-244
+src/kajovokarty/ui/screens/__init__.py                        0      0   100%
+src/kajovokarty/ui/screens/audit.py                         150    150     0%   1-191
+src/kajovokarty/ui/screens/dashboard.py                     120    120     0%   1-228
+src/kajovokarty/ui/screens/imports.py                       423    423     0%   1-547
+src/kajovokarty/ui/screens/matching.py                      813    813     0%   1-1053
+src/kajovokarty/ui/screens/reports.py                       210    210     0%   1-272
+src/kajovokarty/ui/screens/search.py                        175    175     0%   1-223
+src/kajovokarty/ui/screens/settings.py                      366    366     0%   1-438
+src/kajovokarty/ui/theme.py                                  89     13    85%   167, 222-223, 228-266
+src/kajovokarty/ui/tray.py                                   51     51     0%   1-65
+---------------------------------------------------------------------------------------
+TOTAL                                                      9300   5454    41%
+Coverage JSON written to file build/coverage-final.json
+=========================== short test summary info ============================
+SKIPPED [1] tests/ui/test_gui_smoke.py:5: could not import 'PySide6': No module named 'PySide6'
+SKIPPED [1] tests/ui/test_theme_runtime.py:7: could not import 'PySide6': No module named 'PySide6'
+121 passed, 2 skipped in 4.01s

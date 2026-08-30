@@ -1,0 +1,70 @@
+{
+  "product": "KájovoKarty",
+  "version": "1.1.0",
+  "status": "BLOCKED",
+  "repository_complete": false,
+  "run_bat_verified": false,
+  "tests_passed": false,
+  "local_test_suite_passed": true,
+  "audit_passed": false,
+  "installer_built": false,
+  "local_tests": {
+    "passed": 121,
+    "skipped": 2,
+    "failed": 0,
+    "coverage_percent": 41.35,
+    "skipped_reason": "Dva GUI runtime testy nelze načíst, protože PySide6 není v dostupném Linux runtime nainstalován."
+  },
+  "traceability": {
+    "acceptance_scenarios_total": 162,
+    "local_verified": 68,
+    "static_evidence": 55,
+    "blocked_windows": 39
+  },
+  "open_blockers": [
+    "BLK-WINDOWS-RUNNER",
+    "BLK-QT-GUI-DPI",
+    "BLK-WINDOWS-ARTIFACTS",
+    "BLK-LINT-TYPE-RUNTIME"
+  ],
+  "known_implementation_deviations": [],
+  "generated_at_utc": "2026-07-31T19:16:51Z",
+  "local_static_audit_passed": true,
+  "run_bat_format_verified": true,
+  "run_bat_runtime_verified": false,
+  "run_bat_fix": {
+    "status": "CORRECTED_STATICALLY_AND_REGRESSION_TESTED",
+    "root_causes": [
+      "Předchozí LF-only konce řádků rozbíjely dávkový soubor v cmd.exe; tato chyba zůstává opravena ASCII/CRLF variantou.",
+      "scripts/bootstrap.py deklaroval hodnoty --run/--check/--test/--repair jako poziční argument argparse. Argumenty začínající -- jsou však přepínače, takže argparse oznámil chybějící poziční mode."
+    ],
+    "correction": "Bootstrap nyní deklaruje čtyři režimy jako povinnou vzájemně výlučnou skupinu skutečných CLI přepínačů. run.bat může bezpečně předat %MODE% beze změny.",
+    "regression_tests": [
+      "test_bootstrap_accepts_run_bat_mode_flags[--run]",
+      "test_bootstrap_accepts_run_bat_mode_flags[--check]",
+      "test_bootstrap_accepts_run_bat_mode_flags[--test]",
+      "test_bootstrap_accepts_run_bat_mode_flags[--repair]",
+      "test_bootstrap_rejects_missing_mode",
+      "test_run_bat_passes_mode_flag_to_bootstrap",
+      "test_run_bat_has_cmd_safe_encoding_and_line_endings",
+      "test_run_bat_goto_targets_exist"
+    ]
+  },
+  "run_bat_partial_runtime_observation": {
+    "status": "REACHED_BOOTSTRAP",
+    "evidence": "Uživatelský Windows běh úspěšně nainstaloval Python 3.11.9 a vytvořil .venv, poté selhal pouze na parsování interního přepínače --run.",
+    "remaining_verification": "Novou opravu je nutné znovu spustit na Windows; úplný --check/--test/GUI průchod dosud potvrzen není."
+  },
+  "ui_contrast_fix": {
+    "status": "CORRECTED_STATICALLY_AND_REGRESSION_TESTED",
+    "root_cause": "Globální pravidlo QWidget nastavovalo světlé pozadí i potomkům a horní lišta zároveň nastavovala tlačítkům bílý text bez vlastní barvy pozadí. Na Windows tak vznikl bílý text na světlém nativním tlačítku.",
+    "correction": "Barvy byly centralizovány do ui/theme.py; každý stav tlačítka, horní lišta, vstupy, tabulky, menu, záložky, navigace, tooltipy, progres a vysoký kontrast mají explicitní foreground/background. Zároveň je aplikována odpovídající QPalette pro vlastní kreslení canvasu.",
+    "static_audit": "PASS – všechny kritické páry v normálním i vysokokontrastním tématu mají kontrast nejméně 4.5:1; nejnižší naměřený poměr je 5.86:1.",
+    "evidence": [
+      "build/ui-contrast-audit.json",
+      "tests/unit/test_theme_contrast.py",
+      "tests/unit/test_theme_source_hygiene.py",
+      "tests/ui/test_theme_runtime.py"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "app.name": "KájovoKarty",
+  "action.refresh_and_match": "Aktualizovat a spárovat",
+  "state.empty": "V tomto filtru nejsou žádné položky.",
+  "state.error": "Operaci se nepodařilo dokončit. Otevřete technické podrobnosti."
+}

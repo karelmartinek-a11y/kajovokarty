@@ -1,0 +1,397 @@
+{
+  "standard": "WCAG 2.x AA normal text",
+  "minimum_ratio": 4.5,
+  "status": "PASS",
+  "themes": [
+    {
+      "theme": "normal",
+      "status": "PASS",
+      "pairs": {
+        "window text": {
+          "foreground": "#17202A",
+          "background": "#F4F6F8",
+          "ratio": 15.186,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "surface text": {
+          "foreground": "#17202A",
+          "background": "#FFFFFF",
+          "ratio": 16.452,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "muted text": {
+          "foreground": "#44515F",
+          "background": "#FFFFFF",
+          "ratio": 8.114,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "button": {
+          "foreground": "#17202A",
+          "background": "#FFFFFF",
+          "ratio": 16.452,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "disabled button": {
+          "foreground": "#4B5563",
+          "background": "#E5E7EB",
+          "ratio": 6.104,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "accent button": {
+          "foreground": "#FFFFFF",
+          "background": "#005A9C",
+          "ratio": 7.137,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "accent hover": {
+          "foreground": "#FFFFFF",
+          "background": "#00487D",
+          "ratio": 9.446,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "accent pressed": {
+          "foreground": "#FFFFFF",
+          "background": "#003A65",
+          "ratio": 11.711,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "primary button": {
+          "foreground": "#FFFFFF",
+          "background": "#006B4F",
+          "ratio": 6.53,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "primary hover": {
+          "foreground": "#FFFFFF",
+          "background": "#00553F",
+          "ratio": 8.856,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "primary pressed": {
+          "foreground": "#FFFFFF",
+          "background": "#003F2F",
+          "ratio": 11.986,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "top bar": {
+          "foreground": "#FFFFFF",
+          "background": "#17385F",
+          "ratio": 11.882,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "top bar button": {
+          "foreground": "#17385F",
+          "background": "#FFFFFF",
+          "ratio": 11.882,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "top bar button hover": {
+          "foreground": "#17385F",
+          "background": "#E8F0F7",
+          "ratio": 10.32,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "top bar button pressed": {
+          "foreground": "#17385F",
+          "background": "#D5E3EF",
+          "ratio": 9.089,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "navigation selected": {
+          "foreground": "#FFFFFF",
+          "background": "#005A9C",
+          "ratio": 7.137,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "input": {
+          "foreground": "#17202A",
+          "background": "#FFFFFF",
+          "ratio": 16.452,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "placeholder": {
+          "foreground": "#5A6673",
+          "background": "#FFFFFF",
+          "ratio": 5.861,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "selection": {
+          "foreground": "#FFFFFF",
+          "background": "#0B5EA8",
+          "ratio": 6.602,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "table header": {
+          "foreground": "#102A43",
+          "background": "#D9E2EC",
+          "ratio": 11.183,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "tooltip": {
+          "foreground": "#111111",
+          "background": "#FFF4CC",
+          "ratio": 17.142,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "danger": {
+          "foreground": "#FFFFFF",
+          "background": "#A61B1B",
+          "ratio": 7.516,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "warning": {
+          "foreground": "#111111",
+          "background": "#FFF4CC",
+          "ratio": 17.142,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "success": {
+          "foreground": "#174B2A",
+          "background": "#E4F3E9",
+          "ratio": 8.812,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "progress empty": {
+          "foreground": "#17202A",
+          "background": "#FFFFFF",
+          "ratio": 16.452,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "progress filled": {
+          "foreground": "#17202A",
+          "background": "#B9DDF5",
+          "ratio": 11.535,
+          "minimum": 4.5,
+          "status": "PASS"
+        }
+      },
+      "stylesheet": {
+        "balanced_braces": true,
+        "missing_required_selectors": []
+      }
+    },
+    {
+      "theme": "high_contrast",
+      "status": "PASS",
+      "pairs": {
+        "window text": {
+          "foreground": "#000000",
+          "background": "#FFFFFF",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "surface text": {
+          "foreground": "#000000",
+          "background": "#FFFFFF",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "muted text": {
+          "foreground": "#202020",
+          "background": "#FFFFFF",
+          "ratio": 16.293,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "button": {
+          "foreground": "#000000",
+          "background": "#FFFFFF",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "disabled button": {
+          "foreground": "#333333",
+          "background": "#E0E0E0",
+          "ratio": 9.571,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "accent button": {
+          "foreground": "#FFFFFF",
+          "background": "#000000",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "accent hover": {
+          "foreground": "#FFFFFF",
+          "background": "#1A1A1A",
+          "ratio": 17.404,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "accent pressed": {
+          "foreground": "#FFFFFF",
+          "background": "#333333",
+          "ratio": 12.635,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "primary button": {
+          "foreground": "#000000",
+          "background": "#FFD800",
+          "ratio": 15.074,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "primary hover": {
+          "foreground": "#000000",
+          "background": "#FFE34D",
+          "ratio": 16.347,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "primary pressed": {
+          "foreground": "#000000",
+          "background": "#E6C200",
+          "ratio": 12.081,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "top bar": {
+          "foreground": "#FFFFFF",
+          "background": "#000000",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "top bar button": {
+          "foreground": "#000000",
+          "background": "#FFFFFF",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "top bar button hover": {
+          "foreground": "#000000",
+          "background": "#FFD800",
+          "ratio": 15.074,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "top bar button pressed": {
+          "foreground": "#000000",
+          "background": "#E6C200",
+          "ratio": 12.081,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "navigation selected": {
+          "foreground": "#FFFFFF",
+          "background": "#000000",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "input": {
+          "foreground": "#000000",
+          "background": "#FFFFFF",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "placeholder": {
+          "foreground": "#333333",
+          "background": "#FFFFFF",
+          "ratio": 12.635,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "selection": {
+          "foreground": "#FFFFFF",
+          "background": "#000000",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "table header": {
+          "foreground": "#FFFFFF",
+          "background": "#000000",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "tooltip": {
+          "foreground": "#000000",
+          "background": "#FFD800",
+          "ratio": 15.074,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "danger": {
+          "foreground": "#FFFFFF",
+          "background": "#8B0000",
+          "ratio": 10.011,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "warning": {
+          "foreground": "#000000",
+          "background": "#FFD800",
+          "ratio": 15.074,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "success": {
+          "foreground": "#000000",
+          "background": "#FFFFFF",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "progress empty": {
+          "foreground": "#000000",
+          "background": "#FFFFFF",
+          "ratio": 21.0,
+          "minimum": 4.5,
+          "status": "PASS"
+        },
+        "progress filled": {
+          "foreground": "#000000",
+          "background": "#FFD800",
+          "ratio": 15.074,
+          "minimum": 4.5,
+          "status": "PASS"
+        }
+      },
+      "stylesheet": {
+        "balanced_braces": true,
+        "missing_required_selectors": []
+      }
+    }
+  ],
+  "source_audit": {
+    "status": "PASS",
+    "hardcoded_colors_outside_theme": [],
+    "legacy_fault_patterns": [],
+    "central_theme_applied": true
+  }
+}

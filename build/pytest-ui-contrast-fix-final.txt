@@ -1,0 +1,6 @@
+........................................................................ [ 59%]
+.................................................                        [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/ui/test_gui_smoke.py:5: could not import 'PySide6': No module named 'PySide6'
+SKIPPED [1] tests/ui/test_theme_runtime.py:7: could not import 'PySide6': No module named 'PySide6'
+121 passed, 2 skipped in 3.12s
