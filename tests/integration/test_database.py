@@ -12,7 +12,7 @@ def test_migrations_enable_wal_foreign_keys_and_integrity(database: Database) ->
         assert conn.execute("PRAGMA foreign_keys").fetchone()[0] == 1
         assert conn.execute("PRAGMA journal_mode").fetchone()[0].lower() == "wal"
         assert conn.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
-    assert database.current_version() == 5
+    assert database.current_version() == 7
 
 
 def test_audit_is_append_only(database: Database) -> None:
@@ -39,9 +39,9 @@ def test_backup_is_created_before_pending_migration(tmp_path: Path, database: Da
     migration_dir.mkdir()
     for source in database.migrations_dir.glob("*.sql"):
         (migration_dir / source.name).write_bytes(source.read_bytes())
-    (migration_dir / "006_probe.sql").write_text("CREATE TABLE migration_probe(id INTEGER PRIMARY KEY);", encoding="utf-8")
+    (migration_dir / "008_probe.sql").write_text("CREATE TABLE migration_probe(id INTEGER PRIMARY KEY);", encoding="utf-8")
     migrated = Database(database.path, migration_dir, database.backups_dir)
-    assert migrated.migrate() == [6]
+    assert migrated.migrate() == [8]
     assert list(database.backups_dir.glob("pre-migration-*.sqlite3"))
 
 

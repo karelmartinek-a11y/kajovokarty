@@ -15,6 +15,8 @@
     "migrations\\003_operational_hardening.sql": true,
     "migrations\\004_operation_recovery.sql": true,
     "migrations\\005_document_payment_status.sql": true,
+    "migrations\\006_cashbook_reconciliation.sql": true,
+    "migrations\\007_composable_groups.sql": true,
     "requirements.lock": true
   },
   "writeable": true,
@@ -27,7 +29,7 @@
   "import_cryptography": "45.0.5",
   "import_reportlab": "4.4.2",
   "database_migration": true,
-  "schema_version": "5",
+  "schema_version": "7",
   "status": "PASS",
   "failures": []
 }

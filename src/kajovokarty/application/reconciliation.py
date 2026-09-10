@@ -161,6 +161,10 @@ class ReconciliationService:
             ):
                 used = conn.execute("SELECT COALESCE(SUM(amount_minor),0) FROM allocation WHERE source_type='CARD' AND source_id=? AND active=1", (row["id"],)).fetchone()[0]
                 items.append(MatchItem("CARD", f"CARD:{row['id']}", ObjectSide.SOURCE, row["amount_minor"], row["amount_minor"] - used, row["currency_code"], _date(row["occurred_at"]), row["row_version"], None, None, None, bool(row["manual_locked"]), MatchStatus(row["status"]), {}))
+            for row in conn.execute(
+                "SELECT c.*,EXISTS(SELECT 1 FROM match_group_source s JOIN match_group g ON g.id=s.group_id WHERE s.entity_type='CASHBOOK_CARD' AND s.entity_id=c.id AND s.active=1 AND g.manual_lock=1 AND g.status<>'REVERSED') AS manual_locked FROM cashbook_card_transaction c"
+            ):
+                items.append(MatchItem("CASHBOOK_CARD", f"CASHBOOK_CARD:{row['id']}", ObjectSide.SOURCE, row["amount_minor"], row["amount_minor"], row["currency_code"], _date(row["occurred_at"]), row["row_version"], None, None, None, bool(row["manual_locked"]), MatchStatus(row["status"]), {}))
         return items
 
 

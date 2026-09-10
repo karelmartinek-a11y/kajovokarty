@@ -33,7 +33,7 @@ def app_paths(tmp_path: Path) -> AppPaths:
 @pytest.fixture()
 def database(app_paths: AppPaths) -> Database:
     db = Database(app_paths.database, app_paths.migrations, app_paths.backups)
-    assert db.migrate() == [1, 2, 3, 4, 5]
+    assert db.migrate() == [1, 2, 3, 4, 5, 6, 7]
     db.integrity_check()
     return db
 

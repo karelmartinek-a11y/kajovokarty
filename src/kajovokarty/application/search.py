@@ -93,6 +93,18 @@ class SearchService:
                     )
                 )
             for row in conn.execute(
+                "SELECT id,receipt_number,variable_symbol,amount_minor,currency_code,occurred_at,status,client "
+                "FROM cashbook_card_transaction"
+            ):
+                rows.append(
+                    (
+                        f"CASHBOOK_CARD:{row['id']}", "Pokladní karta", row["receipt_number"],
+                        f"{row['status']} • {row['client'] or ''}",
+                        f"{row['id']} {row['receipt_number']} {row['variable_symbol'] or ''}",
+                        self._amount_text(row["amount_minor"], row["currency_code"]), row["occurred_at"],
+                    )
+                )
+            for row in conn.execute(
                 "SELECT id,status,currency_code,difference_minor,updated_at_utc,allocation_mode FROM match_group"
             ):
                 rows.append(

@@ -8,7 +8,9 @@ import json
 import os
 import platform
 import re
+import shutil
 import sqlite3
+import subprocess
 import sys
 import tempfile
 import zipfile
@@ -17,6 +19,7 @@ from pathlib import Path
 from xml.etree import ElementTree
 
 ACCEPTANCE_PATTERN = re.compile(r"\b(?:API|BOOK|BANK|MATCH|UI|DATA|OPS|BUILD|INV)-\d{2}\b")
+NEW_ACCEPTANCE_PATTERN = re.compile(r"\b(?:IMP|REC|AUTO|UI)-\d{3}\b")
 SECRET_PATTERNS = {
     "jwt": re.compile(r"\beyJ[A-Za-z0-9_-]{12,}\.[A-Za-z0-9_-]{12,}\.[A-Za-z0-9_-]{8,}\b"),
     "better_hotel_client_token": re.compile(r"\bbh" r"_c_[A-Za-z0-9_-]{20,}\b"),
@@ -45,7 +48,7 @@ class ForensicAudit:
         self.root = root.resolve()
         self.ssot = ssot.resolve()
         self.findings: list[Finding] = []
-        self.ssot_text = self._docx_text(self.ssot)
+        self.ssot_text = self._read_ssot(self.ssot)
         self.ssot_compact = re.sub(r"\s+", "", self.ssot_text)
         self.manifest = json.loads((self.root / "docs/SSOT_MANIFEST.json").read_text(encoding="utf-8"))
 
@@ -53,7 +56,9 @@ class ForensicAudit:
         self.findings.append(Finding(finding_id, area, status, detail, list(evidence)))
 
     @staticmethod
-    def _docx_text(path: Path) -> str:
+    def _read_ssot(path: Path) -> str:
+        if path.suffix.casefold() in {".md", ".txt"}:
+            return path.read_text(encoding="utf-8")
         with zipfile.ZipFile(path) as archive:
             xml = archive.read("word/document.xml")
         root = ElementTree.fromstring(xml)
@@ -66,6 +71,10 @@ class ForensicAudit:
             elif element.tag.endswith("}br"):
                 texts.append("\n")
         return "\n".join(texts)
+
+    @property
+    def is_new_ssot(self) -> bool:
+        return self.ssot.name.startswith("KajovoKarty_SSOT_nova_rekonsiliace")
 
     @staticmethod
     def _iter_files(root: Path):
@@ -92,6 +101,13 @@ class ForensicAudit:
         return []
 
     def check_ssot_identity(self) -> None:
+        if self.is_new_ssot:
+            required = [
+                "# K", "# 7.", "# 11.", "# 12.", "# 28.",
+            ]
+            missing = [phrase for phrase in required if phrase not in self.ssot_text]
+            self.add("SSOT-NEW-IDENTITY", "SSOT", "PASS" if not missing else "FAIL", f"Nový SSOT; chybí={missing}", str(self.ssot))
+            return
         required_phrases = [
             "KájovoKarty", "Finální jednotný SSOT", "Verze dokumentu", "1.1",
             "Tento jediný dokument je autoritativní zdroj pravdy",
@@ -104,6 +120,12 @@ class ForensicAudit:
         )
 
     def check_cardinality(self) -> None:
+        if self.is_new_ssot:
+            actual = set(NEW_ACCEPTANCE_PATTERN.findall(self.ssot_text))
+            expected = ({f"IMP-{i:03d}" for i in range(1, 9)} | {f"REC-{i:03d}" for i in range(1, 13)} |
+                        {f"AUTO-{i:03d}" for i in range(1, 7)} | {f"UI-{i:03d}" for i in range(1, 9)})
+            self.add("SSOT-NEW-ACCEPTANCE-CARDINALITY", "SSOT", "PASS" if actual == expected else "FAIL", f"SSOT={len(actual)}, očekáváno={len(expected)}, chybí={sorted(expected - actual)}, přebývá={sorted(actual - expected)}", str(self.ssot))
+            return
         doc_ids = set(ACCEPTANCE_PATTERN.findall(self.ssot_text))
         manifest_ids = {row["id"] for row in self.manifest["acceptance_scenarios"]}
         detail = f"SSOT={len(doc_ids)}, manifest={len(manifest_ids)}, očekáváno=162"
@@ -326,7 +348,25 @@ class ForensicAudit:
         build_required = ["build/KajovoKarty.spec", "build/installer/KajovoKarty.iss", "scripts/build_release.py", ".github/workflows/windows-release.yml"]
         absent = [value for value in build_required if not (self.root / value).exists()]
         self.add("BUILD-REPRODUCIBLE-STATIC", "Build", "PASS" if not absent else "FAIL", f"Chybí: {absent}", *build_required)
-        self.add("WINDOWS-RUN-BAT", "Runtime", "BLOCKED", f"Host={platform.system()} {platform.machine()}; skutečný Windows CMD nebyl dostupný.", "run.bat")
+        if platform.system() == "Windows":
+            try:
+                result = subprocess.run(
+                    ["cmd.exe", "/d", "/c", "run.bat --check"],
+                    cwd=self.root,
+                    capture_output=True,
+                    text=True,
+                    timeout=120,
+                    check=False,
+                )
+                run_status = "PASS" if result.returncode == 0 else "FAIL"
+                run_detail = f"cmd.exe run.bat --check exit={result.returncode}."
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                run_status = "BLOCKED"
+                run_detail = f"Windows CMD gate nelze spustit: {exc}"
+        else:
+            run_status = "BLOCKED"
+            run_detail = f"Host={platform.system()} {platform.machine()} není Windows."
+        self.add("WINDOWS-RUN-BAT", "Runtime", run_status, run_detail, "run.bat")
         try:
             __import__("PySide6")
             qt_status = "PASS"
@@ -335,7 +375,13 @@ class ForensicAudit:
             qt_status = "BLOCKED"
             qt_detail = f"PySide6 runtime není dostupný: {exc}"
         self.add("QT-GUI-DPI", "UI runtime", qt_status, qt_detail, "tests/ui/test_gui_smoke.py", "scripts/gui_layout_audit.py")
-        self.add("WINDOWS-EXE-INSTALLER", "Build", "BLOCKED", "Windows EXE a Inno Setup instalátor nelze na tomto hostu skutečně sestavit a spustit.", "scripts/build_release.py", "build/KajovoKarty.iss")
+        if platform.system() == "Windows" and shutil.which("ISCC.exe"):
+            installer_status = "PASS"
+            installer_detail = "Inno Setup compiler je dostupný."
+        else:
+            installer_status = "BLOCKED"
+            installer_detail = "Windows EXE a Inno Setup instalátor nelze na tomto hostu skutečně sestavit a spustit."
+        self.add("WINDOWS-EXE-INSTALLER", "Build", installer_status, installer_detail, "scripts/build_release.py", "build/KajovoKarty.iss")
 
     def check_local_test_evidence(self) -> None:
         evidence_path = self.root / "build/local-test-results.json"
@@ -378,7 +424,40 @@ class ForensicAudit:
             ".github/workflows/windows-release.yml",
         )
 
+    def check_new_ssot_contract(self) -> None:
+        if not self.is_new_ssot:
+            return
+        importer = self.root / "src/kajovokarty/infrastructure/importers/cashbook_xls.py"
+        pairing = self.root / "src/kajovokarty/application/pairing.py"
+        search = self.root / "src/kajovokarty/application/search.py"
+        importer_text = importer.read_text(encoding="utf-8") if importer.exists() else ""
+        pairing_text = pairing.read_text(encoding="utf-8")
+        checks = {
+            "cashbook-importer": importer.exists(),
+            "cashbook-schema": (self.root / "migrations/006_cashbook_reconciliation.sql").exists(),
+            "all-file-formats": all(value in importer_text for value in [".xls", ".xlsx", "csv"]),
+            "atomic-import": "with self.database.transaction()" in importer_text,
+            "no-cashbook-quarantine": "quarantine" not in importer_text.casefold(),
+            "composable-groups": all(value in pairing_text for value in ["def pair_sources", "def add_sources_to_group"]),
+            "exact-zero": "difference == 0" in pairing_text,
+            "cashbook-search": "cashbook_card_transaction" in search.read_text(encoding="utf-8"),
+            "acceptance-tests": (self.root / "tests/integration/test_cashbook_reconciliation.py").exists(),
+            "cashbook-matching-view": "CASHBOOK_CARD" in (self.root / "src/kajovokarty/ui/screens/matching.py").read_text(encoding="utf-8"),
+            "cashbook-led-automation": "CASHBOOK_CARD" in (self.root / "src/kajovokarty/application/payment_reconciliation.py").read_text(encoding="utf-8"),
+            "bank-booking-no-quarantine": all("INSERT INTO quarantined_source_row" not in (self.root / path).read_text(encoding="utf-8") for path in ["src/kajovokarty/infrastructure/importers/bank_file.py", "src/kajovokarty/infrastructure/importers/booking_csv.py"]),
+            "nested-group-ownership": all(value in pairing_text for value in ["def add_group_to_group", "def detach_group_parent", "def dissolve_group", "match_group_child"]),
+        }
+        failed = sorted(name for name, ok in checks.items() if not ok)
+        self.add("SSOT-NEW-CONTRACT", "Implementation", "PASS" if not failed else "FAIL", f"Odchylky: {failed}", "new SSOT implementation")
+
     def check_traceability(self) -> None:
+        if self.is_new_ssot:
+            path = self.root / "docs/SSOT_NOVA_REKONSILIACE_TRACEABILITY.md"
+            text = path.read_text(encoding="utf-8") if path.exists() else ""
+            ids = set(NEW_ACCEPTANCE_PATTERN.findall(self.ssot_text))
+            missing = sorted(value for value in ids if value not in text)
+            self.add("TRACEABILITY-NEW-SSOT", "Audit", "PASS" if not missing else "FAIL", f"Chybějící scénáře: {missing}", str(path))
+            return
         path = self.root / "docs/SSOT_TRACEABILITY.md"
         text = path.read_text(encoding="utf-8") if path.exists() else ""
         missing = [row["id"] for row in self.manifest["acceptance_scenarios"] if f"| {row['id']} |" not in text]
@@ -390,6 +469,7 @@ class ForensicAudit:
         self.check_action_registry()
         self.check_object_action_matrix()
         self.check_component_registry()
+        self.check_new_ssot_contract()
         self.check_repository_hygiene()
         self.check_python_and_money()
         self.check_api_read_only()
@@ -403,7 +483,7 @@ class ForensicAudit:
         verdict = "FAIL" if failed else "BLOCKED" if blocked else "PASS"
         return {
             "product": "KájovoKarty",
-            "ssot_version": "1.1",
+            "ssot_version": "nova-rekonsiliace-2026-09-07" if self.is_new_ssot else "1.1",
             "ssot_sha256": hashlib.sha256(self.ssot.read_bytes()).hexdigest(),
             "repository": str(self.root),
             "environment": {

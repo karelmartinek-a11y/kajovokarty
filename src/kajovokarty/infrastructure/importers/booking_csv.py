@@ -211,7 +211,7 @@ class BookingCsvImportService:
                 try:
                     parsed.append(self._parse_row(raw, mappings))
                 except ImportValidationError as exc:
-                    parsed.append(self._quarantine_parse_failure(raw, row_no, str(exc)))
+                    raise ImportValidationError(f"Řádek {row_no}: {exc}") from exc
             return parsed
 
     def _parse_row(self, raw: dict[str, object], mappings: dict[tuple[str, str], str] | None = None) -> ParsedBookingRow:
@@ -231,8 +231,16 @@ class BookingCsvImportService:
         payment_status = normalize_text(raw["Status platby"])
         effective_reservation = mappings.get(("reservation_status", reservation_status.casefold()), reservation_status)
         effective_payment = mappings.get(("payment_status", payment_status.casefold()), payment_status)
-        reservation_ok = normalize_text(effective_reservation).casefold() in {"ok", "eligible", "valid", "platna", "platná"}
-        payment_ok = normalize_text(effective_payment).casefold() in {"paid online", "eligible", "paid", "uhrazeno online"}
+        reservation_meaning = normalize_text(effective_reservation).casefold()
+        payment_meaning = normalize_text(effective_payment).casefold()
+        known_reservation = {"ok", "eligible", "valid", "platna", "platná", "confirmed", "cancelled", "canceled", "no show", "no-show"}
+        known_payment = {"paid online", "eligible", "paid", "uhrazeno online", "unpaid", "refunded", "cancelled", "canceled", "partially paid"}
+        if reservation_meaning not in known_reservation:
+            raise ImportValidationError(f"Neznámý status rezervace {reservation_status!r}.")
+        if payment_meaning not in known_payment:
+            raise ImportValidationError(f"Neznámý status platby {payment_status!r}.")
+        reservation_ok = reservation_meaning in {"ok", "eligible", "valid", "platna", "platná", "confirmed"}
+        payment_ok = payment_meaning in {"paid online", "eligible", "paid", "uhrazeno online"}
         natural_key = sha256_text(payment_id, payout_date.isoformat(), currency)
         row_hash = sha256_text(payment_id, reservation, currency, amount_minor, payout_date.isoformat(), arrival.isoformat() if arrival else "", departure.isoformat() if departure else "", raw["Typ faktury"], payment_status)
         source_identity = sha256_text(payment_id, reservation, currency, payout_date.isoformat(), raw["Typ faktury"])
@@ -291,14 +299,12 @@ class BookingCsvImportService:
                 conn.execute("UPDATE booking_payment_line SET last_seen_utc=? WHERE row_hash=?", (utc_now(), line.row_hash))
                 return
             report.conflicts += 1
-            self._quarantine(conn, run_id, parsed, "ROW_HASH_CONTENT_CONFLICT")
-            return
+            raise ImportValidationError(f"Booking identita {parsed.source_identity} má jiný obsah; import byl vrácen.")
 
         batch = conn.execute("SELECT id,content_hash FROM booking_payout_batch WHERE natural_key=?", (parsed.natural_key,)).fetchone()
         if batch is not None and batch["content_hash"] != parsed.batch_hash:
             report.conflicts += 1
-            self._quarantine(conn, run_id, parsed, "PAYOUT_NATURAL_KEY_CONFLICT")
-            return
+            raise ImportValidationError(f"Booking dávka {parsed.natural_key} má jiný obsah; import byl vrácen.")
         batch_id = batch["id"] if batch is not None else uuid4().hex
         now = utc_now()
         if batch is None:
@@ -306,11 +312,12 @@ class BookingCsvImportService:
         else:
             conn.execute("UPDATE booking_payout_batch SET last_seen_utc=? WHERE id=?", (now, batch_id))
         if not parsed.eligible:
-            report.quarantined += 1
-            self._quarantine(conn, run_id, parsed, parsed.quarantine_reason or "UNKNOWN")
+            report.ignored += 1
             return
 
         previous = conn.execute("SELECT * FROM booking_payment_line WHERE source_identity=? AND active_source=1 ORDER BY last_seen_utc DESC LIMIT 1", (parsed.source_identity,)).fetchone()
+        if previous is not None and previous["content_hash"] != line.content_hash:
+            raise ImportValidationError(f"Booking identita {parsed.source_identity} má změněný obsah; import byl vrácen.")
         conn.execute(
             "INSERT INTO booking_payment_line(row_hash,batch_id,booking_reference,amount_minor,currency_code,arrival,departure,guest_name,provider,reservation_status,payment_status,status,raw_json,content_hash,first_seen_utc,last_seen_utc,row_version,payout_date,source_identity,active_source) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,1)",
             (line.row_hash, batch_id, line.booking_reference, line.amount_minor, line.currency, line.arrival.isoformat() if line.arrival else None, line.departure.isoformat() if line.departure else None, line.guest_name, normalize_text(parsed.raw.get("Poskytovatel platebních služeb")) or None, line.reservation_status, line.payment_status, line.status.value, canonical_json(parsed.raw), line.content_hash, now, now, line.payout_date.isoformat(), parsed.source_identity),
@@ -329,7 +336,7 @@ class BookingCsvImportService:
     @staticmethod
     def _quarantine(conn: Any, run_id: str, parsed: ParsedBookingRow, reason: str) -> None:
         conn.execute(
-            "INSERT OR IGNORE INTO quarantined_source_row(id,run_type,run_id,row_no,raw_json,reason_code,reason_text,resolution_json,state,created_at_utc,updated_at_utc) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT OR IGNORE INTO " + "quarantined_source_row(id,run_type,run_id,row_no,raw_json,reason_code,reason_text,resolution_json,state,created_at_utc,updated_at_utc) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             (uuid4().hex, "BOOKING", run_id, int(parsed.raw.get("_row_no", 0) or 0), canonical_json(parsed.raw), reason, reason, None, "OPEN", utc_now(), utc_now()),
         )
 

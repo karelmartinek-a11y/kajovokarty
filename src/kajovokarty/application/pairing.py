@@ -190,6 +190,117 @@ class ManualAllocationService:
                 raise PairingError("Přidávané položky používají jinou měnu než cílová skupina.")
             return self._automatic_allocation_plan(conn, invoice_rows, all_sources, source_rows)
 
+    def pair_sources(self, sources: list[SourceRef], *, human_label: str = "Ruční rekonsiliační skupina", correlation_id: str | None = None) -> tuple[str, str]:
+        """Create a composable group from financial source rows."""
+        if not sources:
+            raise PairingError("Vyberte alespoň jeden finanční zdroj.")
+        command_id = uuid4().hex
+        correlation = correlation_id or uuid4().hex
+        group_id = uuid4().hex
+        with self.database.transaction() as conn:
+            rows = [_load_source(conn, ref) for ref in sources]
+            currencies = {str(row["currency_code"]) for row in rows}
+            if len(currencies) != 1:
+                raise PairingError("Jedna rekonsiliační skupina nesmí obsahovat různé měny.")
+            for ref in sources:
+                lock = conn.execute(
+                    "SELECT 1 FROM match_group_source s JOIN match_group g ON g.id=s.group_id WHERE s.entity_type=? AND s.entity_id=? AND s.active=1 AND g.status<>'REVERSED' LIMIT 1",
+                    (ref.source_type.value, ref.source_id),
+                ).fetchone()
+                if lock:
+                    raise PairingError("Finanční zdroj už patří do aktivní rekonsiliační skupiny.")
+            cashbook_total = sum(int(row["amount_minor"]) for ref, row in zip(sources, rows, strict=True) if ref.source_type == SourceType.CASHBOOK_CARD)
+            evidence_total = sum(int(row["amount_minor"]) for ref, row in zip(sources, rows, strict=True) if ref.source_type != SourceType.CASHBOOK_CARD)
+            difference = cashbook_total - evidence_total
+            now = utc_now()
+            conn.execute(
+                "INSERT INTO match_group(id,currency_code,status,document_total_minor,source_total_minor,difference_minor,allocation_mode,manual_lock,source_revision_signature,created_at_utc,updated_at_utc,row_version) VALUES(?,?,?,?,?,?,?,?,?,?,?,1)",
+                (group_id, next(iter(currencies)), MatchStatus.AGGREGATE_MATCHED.value if difference == 0 else (MatchStatus.UNDERPAID.value if difference > 0 else MatchStatus.OVERPAID.value), cashbook_total, evidence_total, difference, AllocationMode.AGGREGATE.value, 1, _revision_signature([], rows), now, now),
+            )
+            for ref, row in zip(sources, rows, strict=True):
+                conn.execute("INSERT INTO match_group_source(group_id,entity_type,entity_id,signed_amount_minor,first_seen_utc,active,row_version) VALUES(?,?,?,?,?,1,1)", (group_id, ref.source_type.value, ref.source_id, int(row["amount_minor"]), now))
+            self._record_command(conn, command_id, correlation, "CREATE_SOURCE_GROUP", {"group_id": group_id}, {"group_id": group_id}, human_label)
+            self.audit.append(conn, event_code="SOURCE_GROUP_CREATED", operation_label=human_label, context=AuditContext(correlation, command_id), object_ref=f"MATCH_GROUP:{group_id}", after={"sources": [ref.object_ref for ref in sources], "difference_minor": difference})
+            self._recalculate_group(conn, group_id)
+        return group_id, command_id
+
+    def add_sources_to_group(self, group_id: str, sources: list[SourceRef], *, correlation_id: str | None = None) -> str:
+        if not sources:
+            raise PairingError("Vyberte alespoň jeden finanční zdroj.")
+        command_id = uuid4().hex
+        correlation = correlation_id or uuid4().hex
+        with self.database.transaction() as conn:
+            group = conn.execute("SELECT * FROM match_group WHERE id=? AND status<>'REVERSED'", (group_id,)).fetchone()
+            if group is None:
+                raise PairingError("Rekonsiliační skupina neexistuje nebo byla rozpojena.")
+            for ref in sources:
+                row = _load_source(conn, ref)
+                if str(row["currency_code"]) != str(group["currency_code"]):
+                    raise PairingError("Nelze spojit různé měny.")
+                lock = conn.execute("SELECT 1 FROM match_group_source s JOIN match_group g ON g.id=s.group_id WHERE s.entity_type=? AND s.entity_id=? AND s.active=1 AND g.status<>'REVERSED' AND g.id<>? LIMIT 1", (ref.source_type.value, ref.source_id, group_id)).fetchone()
+                if lock:
+                    raise PairingError("Finanční zdroj už patří do jiné aktivní skupiny.")
+                conn.execute("INSERT OR IGNORE INTO match_group_source(group_id,entity_type,entity_id,signed_amount_minor,first_seen_utc,active,row_version) VALUES(?,?,?,?,?,1,1)", (group_id, ref.source_type.value, ref.source_id, int(row["amount_minor"]), utc_now()))
+            self._recalculate_group(conn, group_id)
+            self._record_command(conn, command_id, correlation, "ADD_SOURCE_GROUP_MEMBERS", {"group_id": group_id, "sources": [ref.object_ref for ref in sources]}, {"group_id": group_id}, "Přidání zdrojů do skupiny")
+            self.audit.append(conn, event_code="SOURCE_GROUP_EXTENDED", operation_label="Přidat zdroj do skupiny", context=AuditContext(correlation, command_id), object_ref=f"MATCH_GROUP:{group_id}", after={"sources": [ref.object_ref for ref in sources]})
+        return command_id
+
+    def add_group_to_group(self, parent_group_id: str, child_group_id: str, *, correlation_id: str | None = None) -> str:
+        """Compose two groups while preserving one active parent per child."""
+        if parent_group_id == child_group_id:
+            raise PairingError("Skupina nemůže být sama sobě rodičem.")
+        command_id = uuid4().hex
+        correlation = correlation_id or uuid4().hex
+        with self.database.transaction() as conn:
+            parent = conn.execute("SELECT * FROM match_group WHERE id=? AND status<>'REVERSED'", (parent_group_id,)).fetchone()
+            child = conn.execute("SELECT * FROM match_group WHERE id=? AND status<>'REVERSED'", (child_group_id,)).fetchone()
+            if parent is None or child is None:
+                raise PairingError("Rodičovská nebo vkládaná skupina neexistuje.")
+            if parent["currency_code"] != child["currency_code"]:
+                raise PairingError("Nelze spojit skupiny v různých měnách.")
+            if conn.execute("SELECT 1 FROM match_group_child WHERE child_group_id=? AND active=1", (child_group_id,)).fetchone():
+                raise PairingError("Vkládaná skupina už má aktivního rodiče.")
+            cycle = conn.execute(
+                "WITH RECURSIVE descendants(id) AS (SELECT child_group_id FROM match_group_child WHERE parent_group_id=? AND active=1 UNION ALL SELECT m.child_group_id FROM match_group_child m JOIN descendants d ON m.parent_group_id=d.id WHERE m.active=1) SELECT 1 FROM descendants WHERE id=?",
+                (child_group_id, parent_group_id),
+            ).fetchone()
+            if cycle:
+                raise PairingError("Skupinu nelze vložit do její vlastní podskupiny.")
+            now = utc_now()
+            conn.execute("INSERT INTO match_group_child(parent_group_id,child_group_id,active,created_at_utc,row_version) VALUES(?,?,1,?,1)", (parent_group_id, child_group_id, now))
+            self._recalculate_group(conn, parent_group_id)
+            self._record_command(conn, command_id, correlation, "ADD_GROUP_TO_GROUP", {"parent_group_id": parent_group_id, "child_group_id": child_group_id}, {"parent_group_id": parent_group_id, "child_group_id": child_group_id}, "Vložit skupinu do skupiny")
+            self.audit.append(conn, event_code="GROUP_COMPOSED", operation_label="Vložit skupinu do skupiny", context=AuditContext(correlation, command_id), object_ref=f"MATCH_GROUP:{parent_group_id}", after={"child_group_id": child_group_id})
+        return command_id
+
+    def detach_group_parent(self, parent_group_id: str, child_group_id: str, *, correlation_id: str | None = None) -> str:
+        command_id = uuid4().hex
+        correlation = correlation_id or uuid4().hex
+        with self.database.transaction() as conn:
+            row = conn.execute("SELECT 1 FROM match_group_child WHERE parent_group_id=? AND child_group_id=? AND active=1", (parent_group_id, child_group_id)).fetchone()
+            if row is None:
+                raise PairingError("Nadřazená vazba neexistuje.")
+            conn.execute("UPDATE match_group_child SET active=0,row_version=row_version+1 WHERE parent_group_id=? AND child_group_id=?", (parent_group_id, child_group_id))
+            self._recalculate_group(conn, parent_group_id)
+            self._record_command(conn, command_id, correlation, "DETACH_GROUP_PARENT", {"parent_group_id": parent_group_id, "child_group_id": child_group_id}, {"parent_group_id": parent_group_id, "child_group_id": child_group_id}, "Rozpojit nadřazenou skupinu")
+        return command_id
+
+    def dissolve_group(self, group_id: str, *, correlation_id: str | None = None) -> str:
+        """Remove a group's direct memberships and leave its children usable."""
+        command_id = uuid4().hex
+        correlation = correlation_id or uuid4().hex
+        with self.database.transaction() as conn:
+            group = conn.execute("SELECT * FROM match_group WHERE id=? AND status<>'REVERSED'", (group_id,)).fetchone()
+            if group is None:
+                raise PairingError("Skupina neexistuje nebo už byla rozpojena.")
+            conn.execute("UPDATE match_group_source SET active=0,row_version=row_version+1 WHERE group_id=?", (group_id,))
+            conn.execute("UPDATE match_group_document SET active=0,row_version=row_version+1 WHERE group_id=?", (group_id,))
+            conn.execute("UPDATE match_group_child SET active=0,row_version=row_version+1 WHERE parent_group_id=?", (group_id,))
+            conn.execute("UPDATE match_group SET status='REVERSED',manual_lock=0,updated_at_utc=?,row_version=row_version+1 WHERE id=?", (utc_now(), group_id))
+            self._record_command(conn, command_id, correlation, "DISSOLVE_GROUP", {"group_id": group_id}, {"group_id": group_id}, "Rozložit skupinu")
+        return command_id
+
     def pair(
         self,
         documents: list[DocumentRef],
@@ -974,8 +1085,14 @@ class ManualAllocationService:
         if group is None:
             return
         document_total = int(conn.execute("SELECT COALESCE(SUM(signed_amount_minor),0) FROM match_group_document WHERE group_id=? AND active=1", (group_id,)).fetchone()[0])
-        source_total = int(conn.execute("SELECT COALESCE(SUM(signed_amount_minor),0) FROM match_group_source WHERE group_id=? AND active=1", (group_id,)).fetchone()[0])
+        document_total += int(conn.execute("SELECT COALESCE(SUM(signed_amount_minor),0) FROM match_group_source WHERE group_id=? AND entity_type='CASHBOOK_CARD' AND active=1", (group_id,)).fetchone()[0])
+        source_total = int(conn.execute("SELECT COALESCE(SUM(signed_amount_minor),0) FROM match_group_source WHERE group_id=? AND entity_type<>'CASHBOOK_CARD' AND active=1", (group_id,)).fetchone()[0])
         difference = document_total - source_total
+        child_total = int(conn.execute(
+            "SELECT COALESCE(SUM(c.difference_minor),0) FROM match_group_child m JOIN match_group c ON c.id=m.child_group_id WHERE m.parent_group_id=? AND m.active=1 AND c.status<>'REVERSED'",
+            (group_id,),
+        ).fetchone()[0])
+        difference += child_total
         active_members = int(conn.execute("SELECT (SELECT COUNT(*) FROM match_group_document WHERE group_id=? AND active=1)+(SELECT COUNT(*) FROM match_group_source WHERE group_id=? AND active=1)", (group_id, group_id)).fetchone()[0])
         if active_members == 0:
             status = MatchStatus.REVERSED
@@ -984,7 +1101,7 @@ class ManualAllocationService:
         elif group["status"] == MatchStatus.MANUAL_RESOLVED.value:
             status = MatchStatus.MANUAL_RESOLVED
         elif group["allocation_mode"] == AllocationMode.AGGREGATE.value:
-            status = MatchStatus.AGGREGATE_MATCHED if difference == 0 else MatchStatus.CONFLICT
+            status = MatchStatus.AGGREGATE_MATCHED if difference == 0 else (MatchStatus.UNDERPAID if difference > 0 else MatchStatus.OVERPAID)
         else:
             allocations = conn.execute("SELECT amount_minor,method FROM allocation WHERE group_id=? AND active=1", (group_id,)).fetchall()
             allocated_total = sum(int(row["amount_minor"]) for row in allocations)
@@ -1003,6 +1120,8 @@ class ManualAllocationService:
                 status = MatchStatus.UNMATCHED
         conn.execute("UPDATE match_group SET document_total_minor=?,source_total_minor=?,difference_minor=?,status=?,updated_at_utc=?,row_version=row_version+1 WHERE id=?", (document_total, source_total, difference, status.value, utc_now(), group_id))
         ManualAllocationService._refresh_group_entities(conn, group_id)
+        for parent in conn.execute("SELECT parent_group_id FROM match_group_child WHERE child_group_id=? AND active=1", (group_id,)).fetchall():
+            ManualAllocationService._recalculate_group(conn, str(parent[0]))
 
     @staticmethod
     def _refresh_group_entities(conn: Any, group_id: str) -> None:
@@ -1048,12 +1167,16 @@ def _load_invoice(conn: Any, ref: DocumentRef) -> Any:
 
 
 def _load_source(conn: Any, ref: SourceRef) -> Any:
-    if ref.source_type == SourceType.BOOKING:
+    if ref.source_type == SourceType.CASHBOOK_CARD:
+        row = conn.execute("SELECT id,amount_minor,currency_code,row_version,status,content_hash FROM cashbook_card_transaction WHERE id=? OR cashbook_identity=?", (ref.source_id, ref.source_id)).fetchone()
+    elif ref.source_type == SourceType.BOOKING:
         row = conn.execute("SELECT row_hash AS id,amount_minor,currency_code,row_version,status,content_hash FROM booking_payment_line WHERE row_hash=?", (ref.source_id,)).fetchone()
     elif ref.source_type == SourceType.CARD:
         row = conn.execute("SELECT id,amount_minor,currency_code,row_version,status,content_hash FROM card_transaction WHERE id=? OR (terminal_id || '|' || seq_id)=?", (ref.source_id, ref.source_id)).fetchone()
-    else:
+    elif ref.source_type in {SourceType.CASH, SourceType.OTHER}:
         row = conn.execute("SELECT id,amount_minor,currency_code,row_version,'MANUAL' AS status,'' AS content_hash FROM manual_settlement WHERE id=? AND active=1", (ref.source_id,)).fetchone()
+    else:
+        row = None
     if row is None:
         raise PairingError("Zdroj úhrady neexistuje.")
     if ref.expected_row_version is not None and row["row_version"] != ref.expected_row_version:
@@ -1132,14 +1255,21 @@ def _refresh_entities(conn: Any, invoice_ids: Iterable[str], source_refs: Iterab
             status = _object_status(conn, "invoice_id", invoice_id, int(row["total_minor"]), group_statuses)
         conn.execute("UPDATE invoice SET status=?,row_version=row_version+1 WHERE external_id=?", (status, invoice_id))
     for ref in set(source_refs):
-        if ref.source_type not in {SourceType.BOOKING, SourceType.CARD}:
+        if ref.source_type not in {SourceType.CASHBOOK_CARD, SourceType.BOOKING, SourceType.CARD}:
             continue
         source = _load_source(conn, ref)
         group_statuses = {item[0] for item in conn.execute("SELECT g.status FROM match_group g JOIN match_group_source s ON s.group_id=g.id WHERE s.entity_type=? AND s.entity_id=? AND s.active=1 AND g.status<>'REVERSED'", (ref.source_type.value, ref.source_id))}
         status = _object_status(conn, "source", ref.object_ref, int(source["amount_minor"]), group_statuses)
-        table = "booking_payment_line" if ref.source_type == SourceType.BOOKING else "card_transaction"
-        key = "row_hash" if ref.source_type == SourceType.BOOKING else "id"
-        conn.execute(f"UPDATE {table} SET status=?,row_version=row_version+1 WHERE {key}=?", (status, ref.source_id))
+        if ref.source_type == SourceType.CASHBOOK_CARD:
+            table, key = "cashbook_card_transaction", "id"
+        elif ref.source_type == SourceType.BOOKING:
+            table, key = "booking_payment_line", "row_hash"
+        else:
+            table, key = "card_transaction", "id"
+        if ref.source_type == SourceType.CASHBOOK_CARD:
+            conn.execute("UPDATE cashbook_card_transaction SET status=?,row_version=row_version+1 WHERE id=? OR cashbook_identity=?", (status, ref.source_id, ref.source_id))
+        else:
+            conn.execute(f"UPDATE {table} SET status=?,row_version=row_version+1 WHERE {key}=?", (status, ref.source_id))
 
 
 def _object_status(conn: Any, kind: str, identifier: str, total_minor: int, group_statuses: set[str]) -> str:

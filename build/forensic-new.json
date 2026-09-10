@@ -1,0 +1,240 @@
+{
+  "product": "KájovoKarty",
+  "ssot_version": "nova-rekonsiliace-2026-09-07",
+  "ssot_sha256": "4d85c0cd84523758fcafbaa1de8863849684d066da8a2f13d9857de5f061ffb7",
+  "repository": "D:\\KajovoKarty",
+  "environment": {
+    "platform": "Windows-10-10.0.19045-SP0",
+    "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "cwd": "D:\\kajovokarty"
+  },
+  "verdict": "BLOCKED",
+  "local_static_checks_passed": true,
+  "failed_findings": [],
+  "blocked_gates": [
+    "WINDOWS-EXE-INSTALLER"
+  ],
+  "findings": [
+    {
+      "id": "SSOT-NEW-IDENTITY",
+      "area": "SSOT",
+      "status": "PASS",
+      "detail": "Nový SSOT; chybí=[]",
+      "evidence": [
+        "D:\\KajovoKarty\\KajovoKarty_SSOT_nova_rekonsiliace_2026-09-07.md"
+      ]
+    },
+    {
+      "id": "SSOT-NEW-ACCEPTANCE-CARDINALITY",
+      "area": "SSOT",
+      "status": "PASS",
+      "detail": "SSOT=34, očekáváno=34, chybí=[], přebývá=[]",
+      "evidence": [
+        "D:\\KajovoKarty\\KajovoKarty_SSOT_nova_rekonsiliace_2026-09-07.md"
+      ]
+    },
+    {
+      "id": "UI-ACTION-REGISTRY",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "enum=40, specs=40, přesné odchylky=[]",
+      "evidence": [
+        "src/kajovokarty/ui/action_registry.py"
+      ]
+    },
+    {
+      "id": "UI-ACTION-HANDLERS",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "Akce bez dohledatelného handleru: []",
+      "evidence": [
+        "src/kajovokarty/ui/main_window.py"
+      ]
+    },
+    {
+      "id": "UI-OBJECT-ACTION-MATRIX",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "Objekty=15, chybějící vazby=[]",
+      "evidence": [
+        "docs/OBJECT_ACTION_MATRIX.json",
+        "src/kajovokarty/ui/action_registry.py"
+      ]
+    },
+    {
+      "id": "UI-COMPONENT-REGISTRY",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "enum=76, specs=76, přesné odchylky=[]",
+      "evidence": [
+        "src/kajovokarty/ui/component_registry.py"
+      ]
+    },
+    {
+      "id": "UI-COMPONENT-LIVE-BINDINGS",
+      "area": "UI",
+      "status": "PASS",
+      "detail": "Komponenty bez dohledatelné živé vazby: []",
+      "evidence": [
+        "src/kajovokarty/ui/"
+      ]
+    },
+    {
+      "id": "SSOT-NEW-CONTRACT",
+      "area": "Implementation",
+      "status": "PASS",
+      "detail": "Odchylky: []",
+      "evidence": [
+        "new SSOT implementation"
+      ]
+    },
+    {
+      "id": "REPO-TREE",
+      "area": "Repository",
+      "status": "PASS",
+      "detail": "Chybí: []",
+      "evidence": []
+    },
+    {
+      "id": "REPO-SECRETS",
+      "area": "Security",
+      "status": "PASS",
+      "detail": "Nálezy: []",
+      "evidence": []
+    },
+    {
+      "id": "REPO-PLACEHOLDERS",
+      "area": "Repository",
+      "status": "PASS",
+      "detail": "Nálezy: []",
+      "evidence": []
+    },
+    {
+      "id": "REPO-NO-INPUTS",
+      "area": "Security",
+      "status": "PASS",
+      "detail": "Nálezy: []",
+      "evidence": []
+    },
+    {
+      "id": "PY-AST",
+      "area": "Static",
+      "status": "PASS",
+      "detail": "Chyby: []",
+      "evidence": []
+    },
+    {
+      "id": "MONEY-NO-FLOAT",
+      "area": "Finance",
+      "status": "PASS",
+      "detail": "Nálezy: []",
+      "evidence": []
+    },
+    {
+      "id": "API-READ-ONLY",
+      "area": "API",
+      "status": "PASS",
+      "detail": "forbidden=[], endpoint=True, headers=True",
+      "evidence": [
+        "src/kajovokarty/infrastructure/better_hotel/"
+      ]
+    },
+    {
+      "id": "DB-MIGRATIONS",
+      "area": "Database",
+      "status": "PASS",
+      "detail": "migrace=[1, 2, 3, 4, 5, 6, 7], integrity=ok, foreign_key_errors=0",
+      "evidence": [
+        "migrations/"
+      ]
+    },
+    {
+      "id": "BOOTSTRAP-STATIC",
+      "area": "Build",
+      "status": "PASS",
+      "detail": "ASCII bez BOM, výhradně CRLF.",
+      "evidence": [
+        "run.bat",
+        "scripts/bootstrap.py"
+      ]
+    },
+    {
+      "id": "BUILD-REPRODUCIBLE-STATIC",
+      "area": "Build",
+      "status": "PASS",
+      "detail": "Chybí: []",
+      "evidence": [
+        "build/KajovoKarty.spec",
+        "build/installer/KajovoKarty.iss",
+        "scripts/build_release.py",
+        ".github/workflows/windows-release.yml"
+      ]
+    },
+    {
+      "id": "WINDOWS-RUN-BAT",
+      "area": "Runtime",
+      "status": "PASS",
+      "detail": "cmd.exe run.bat --check exit=0.",
+      "evidence": [
+        "run.bat"
+      ]
+    },
+    {
+      "id": "QT-GUI-DPI",
+      "area": "UI runtime",
+      "status": "PASS",
+      "detail": "PySide6 lze importovat.",
+      "evidence": [
+        "tests/ui/test_gui_smoke.py",
+        "scripts/gui_layout_audit.py"
+      ]
+    },
+    {
+      "id": "WINDOWS-EXE-INSTALLER",
+      "area": "Build",
+      "status": "BLOCKED",
+      "detail": "Windows EXE a Inno Setup instalátor nelze na tomto hostu skutečně sestavit a spustit.",
+      "evidence": [
+        "scripts/build_release.py",
+        "build/KajovoKarty.iss"
+      ]
+    },
+    {
+      "id": "LOCAL-TEST-SUITE",
+      "area": "Tests",
+      "status": "PASS",
+      "detail": "passed=130, failed=0, skipped=0; skipped GUI test není release PASS.",
+      "evidence": [
+        "build/local-test-results.json"
+      ]
+    },
+    {
+      "id": "LOCAL-COVERAGE-EVIDENCE",
+      "area": "Tests",
+      "status": "PASS",
+      "detail": "Lokální coverage=62.31 %. UI moduly nejsou bez PySide6 runtime pokryté a tento údaj nenahrazuje Windows GUI audit.",
+      "evidence": [
+        "build/coverage-final.json"
+      ]
+    },
+    {
+      "id": "STATIC-LINT-TYPE-TOOLS",
+      "area": "Static",
+      "status": "PASS",
+      "detail": "ruff a mypy jsou dostupné.",
+      "evidence": [
+        "pyproject.toml",
+        ".github/workflows/windows-release.yml"
+      ]
+    },
+    {
+      "id": "TRACEABILITY-NEW-SSOT",
+      "area": "Audit",
+      "status": "PASS",
+      "detail": "Chybějící scénáře: []",
+      "evidence": [
+        "D:\\KajovoKarty\\docs\\SSOT_NOVA_REKONSILIACE_TRACEABILITY.md"
+      ]
+    }
+  ]
+}

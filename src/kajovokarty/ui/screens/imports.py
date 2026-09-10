@@ -105,6 +105,7 @@ class ImportsScreen(QWidget):
         self.registry = registry
         self.booking_queue: list[Path] = []
         self.bank_queue: list[tuple[Path, str | None]] = []
+        self.cashbook_queue: list[Path] = []
         self.queue_previews: dict[tuple[str, str, str | None], ImportFilePreview] = {}
         self.active_operation: str | None = None
         self.quarantine_dialog: QuarantineDialog | None = None
@@ -152,6 +153,9 @@ class ImportsScreen(QWidget):
         bind_component(self.bank_drop, ComponentId.IMPORT_BANK_DROP)
         self.bank_drop.filesSelected.connect(self.queue_bank)
         bank_layout.addWidget(self.bank_drop)
+        cashbook_button = QPushButton("Vybrat pokladní deník Better Hotel (XLS/XLSX/CSV)")
+        cashbook_button.clicked.connect(self.choose_cashbook)
+        bank_layout.addWidget(cashbook_button)
         cards.addWidget(bank, 0, 2)
         root.addLayout(cards)
         queue_box = QGroupBox("Fronta souborů")
@@ -164,10 +168,13 @@ class ImportsScreen(QWidget):
         import_booking.clicked.connect(self.run_booking)
         import_bank = QPushButton("Importovat banku")
         import_bank.clicked.connect(self.run_bank)
+        import_cashbook = QPushButton("Importovat pokladní deník")
+        import_cashbook.clicked.connect(self.run_cashbook)
         remove = QPushButton("Odebrat vybrané")
         remove.clicked.connect(self.remove_selected)
         queue_buttons.addWidget(import_booking)
         queue_buttons.addWidget(import_bank)
+        queue_buttons.addWidget(import_cashbook)
         queue_buttons.addWidget(remove)
         queue_buttons.addStretch(1)
         queue_layout.addLayout(queue_buttons)
@@ -268,6 +275,8 @@ class ImportsScreen(QWidget):
             kind, path, sheet = item.data(Qt.ItemDataRole.UserRole)
             if kind == "BOOKING":
                 self.booking_queue = [value for value in self.booking_queue if str(value) != path]
+            elif kind == "CASHBOOK":
+                self.cashbook_queue = [value for value in self.cashbook_queue if str(value) != path]
             else:
                 self.bank_queue = [value for value in self.bank_queue if not (str(value[0]) == path and value[1] == sheet)]
             self.queue_previews.pop((kind, path, sheet), None)
@@ -301,6 +310,17 @@ class ImportsScreen(QWidget):
             QMessageBox.information(self, "Fronta je prázdná", "Nejprve přidejte bankovní soubor.")
             return
         self._start_operation("BANK_IMPORT", self._bank_task, exclusive=True)
+
+    def choose_cashbook(self) -> None:
+        files, _ = QFileDialog.getOpenFileNames(self, "Vyberte pokladní deník Better Hotel", "", "Pokladní deník (*.xls *.xlsx *.csv)")
+        self.cashbook_queue.extend(Path(value) for value in files if Path(value) not in self.cashbook_queue)
+        self._rebuild_queue_widget()
+
+    def run_cashbook(self) -> None:
+        if not self.cashbook_queue:
+            QMessageBox.information(self, "Fronta je prázdná", "Nejprve přidejte pokladní deník Better Hotel.")
+            return
+        self._start_operation("CASHBOOK_IMPORT", self._cashbook_task, exclusive=True)
 
     def run_full(self) -> None:
         self._start_operation("FULL_WORKFLOW", self._full_task, exclusive=True)
@@ -352,6 +372,7 @@ class ImportsScreen(QWidget):
                 self.bank_queue.append(key)
                 item_key = ("BANK", str(preview.path), preview.selected_sheet)
                 self.queue_previews[item_key] = preview
+        self.cashbook_queue = [Path(str(value)) for value in recovery.get("cashbook_paths", []) if Path(str(value)).is_file()]
         self._rebuild_queue_widget()
 
         if operation_type == "API_SYNC":
@@ -360,6 +381,8 @@ class ImportsScreen(QWidget):
             self.run_booking()
         elif operation_type == "BANK_IMPORT":
             self.run_bank()
+        elif operation_type == "CASHBOOK_IMPORT":
+            self.run_cashbook()
         elif operation_type == "FULL_WORKFLOW":
             self.run_full()
         else:
@@ -375,6 +398,7 @@ class ImportsScreen(QWidget):
                 {"path": str(path), "sheet": sheet_name}
                 for path, sheet_name in self.bank_queue
             ],
+            "cashbook_paths": [str(path) for path in self.cashbook_queue],
         }
 
     def cancel_operation(self) -> None:
@@ -406,6 +430,13 @@ class ImportsScreen(QWidget):
             self.container.bank_import.import_file(path, sheet_name=sheet_name, progress_callback=lambda current, total, message, i=index: context.progress(i - 1 + current / max(total, 1), len(queue), message, "Banka"), cancel_callback=context.is_cancelled)
         self.bank_queue.clear()
 
+    def _cashbook_task(self, context: Any) -> None:
+        queue = list(self.cashbook_queue)
+        for index, path in enumerate(queue, start=1):
+            self.container.cashbook_import.import_file(path, cancel_callback=context.is_cancelled)
+            context.progress(index, len(queue), f"Pokladní deník: {path.name}", "Pokladna")
+        self.cashbook_queue.clear()
+
     def _full_task(self, context: Any) -> None:
         tokens = self.container.secrets.load_tokens()
         if tokens.complete:
@@ -416,8 +447,10 @@ class ImportsScreen(QWidget):
             self._booking_task(context)
         if self.bank_queue:
             self._bank_task(context)
+        if self.cashbook_queue:
+            self._cashbook_task(context)
         context.heartbeat("Připravuji deterministické párování úhrad…")
-        self.container.payments.auto_match(
+        self.container.payments.auto_reconcile(
             cancel=context.is_cancelled,
             progress=lambda current, total, message: context.progress(current, total, message, "Párování úhrad"),
         )
@@ -456,7 +489,7 @@ class ImportsScreen(QWidget):
 
     def refresh_runs(self) -> None:
         rows: list[tuple[str, Any]] = []
-        for table, source in (("api_sync_run", "Better Hotel"), ("booking_import_run", "Booking.com"), ("bank_import_run", "Banka")):
+        for table, source in (("api_sync_run", "Better Hotel"), ("booking_import_run", "Booking.com"), ("bank_import_run", "Banka"), ("cashbook_import_run", "Pokladna")):
             rows.extend((source, row) for row in self.container.database.query(f"SELECT * FROM {table} ORDER BY started_at_utc DESC LIMIT 50"))
         rows.sort(key=lambda pair: pair[1]["started_at_utc"], reverse=True)
         self.runs.setRowCount(len(rows))
@@ -500,6 +533,8 @@ class ImportsScreen(QWidget):
             table = "api_sync_run"
         elif source == "Booking.com":
             table = "booking_import_run"
+        elif source == "Pokladna":
+            table = "cashbook_import_run"
         else:
             table = "bank_import_run"
         rows = self.container.database.query(f"SELECT * FROM {table} WHERE id=?", (run_id,))
@@ -542,6 +577,11 @@ class ImportsScreen(QWidget):
             key = ("BANK", str(path), sheet)
             preview = self.queue_previews.get(key)
             item = QListWidgetItem(preview.human_summary if preview else f"Banka • {path.name}" + (f" • {sheet}" if sheet else ""))
+            item.setData(Qt.ItemDataRole.UserRole, key)
+            self.queue.addItem(item)
+        for path in self.cashbook_queue:
+            key = ("CASHBOOK", str(path), None)
+            item = QListWidgetItem(f"Pokladna • {path.name}")
             item.setData(Qt.ItemDataRole.UserRole, key)
             self.queue.addItem(item)
 

@@ -1,11 +1,8 @@
 {
   "command": "PYTHONPATH=src:. python -m pytest -q --cov=src/kajovokarty --cov-report=json:build/coverage-final.json --cov-report=term-missing tests",
   "exit_code": 0,
-  "passed": 121,
+  "passed": 130,
   "failed": 0,
-  "skipped": 2,
-  "skipped_details": [
-    "tests/ui/test_gui_smoke.py – PySide6 není v tomto Linux runtime dostupný.",
-    "tests/ui/test_theme_runtime.py – PySide6 není v tomto Linux runtime dostupný."
-  ]
+  "skipped": 0,
+  "skipped_details": []
 }

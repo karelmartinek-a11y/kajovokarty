@@ -312,7 +312,7 @@ class MainWindow(QMainWindow):
                 self.matching.focus_object(contexts[0])
         elif action_id == ActionId.ADD_TO_TRAY:
             for context in contexts:
-                if context.object_type in {"INVOICE", "BOOKING", "CARD", "MANUAL"}:
+                if context.object_type in {"INVOICE", "BOOKING", "CARD", "CASHBOOK_CARD", "MANUAL"}:
                     self.tray_contexts[context.object_ref] = context
             self._update_tray()
         elif action_id == ActionId.REMOVE_FROM_TRAY:
@@ -438,7 +438,11 @@ class MainWindow(QMainWindow):
 
     def _pair_contexts(self, contexts: list[ObjectContext], *, aggregate: bool) -> None:
         documents = [self._document_ref(context) for context in contexts if context.object_type == "INVOICE"]
-        sources = [self._source_ref(context) for context in contexts if context.object_type in {"BOOKING", "CARD", "MANUAL"}]
+        sources = [self._source_ref(context) for context in contexts if context.object_type in {"BOOKING", "CARD", "CASHBOOK_CARD", "MANUAL"}]
+        if not documents and sources:
+            self.container.pairing.pair_sources(sources)
+            self.refresh_all()
+            return
         if not documents or not sources:
             raise PairingError("Vyberte alespoň jeden doklad a jeden zdroj úhrady.")
         currencies = {context.currency for context in contexts if context.currency}
@@ -883,6 +887,11 @@ class MainWindow(QMainWindow):
             if not row:
                 raise PairingError("Karetní transakce nebyla nalezena.")
             return SourceRef(SourceType.CARD, str(row[0][0]), context.row_version)
+        if context.object_type == "CASHBOOK_CARD":
+            row = self.container.database.query("SELECT id FROM cashbook_card_transaction WHERE id=? OR cashbook_identity=? ORDER BY id LIMIT 1", (context.object_id, context.object_id))
+            if not row:
+                raise PairingError("Cashbook source nebyl nalezen.")
+            return SourceRef(SourceType.CASHBOOK_CARD, str(row[0][0]), context.row_version)
         row = self.container.database.query("SELECT type FROM manual_settlement WHERE id=?", (context.object_id,))
         if not row:
             raise PairingError("Ruční zdroj nebyl nalezen.")

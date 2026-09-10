@@ -348,11 +348,11 @@ class BankFileImportService:
         if folded in CLOSURE_TYPES:
             return ParsedBankRow(row_no, "closure", raw, None)
         if folded not in SALE_TYPES and folded not in REFUND_TYPES:
-            return ParsedBankRow(row_no, "quarantine", raw, None, "UNKNOWN_TRANSACTION_TYPE")
+            raise ImportValidationError(f"Řádek {row_no}: neznámý typ transakce {row_type!r}.")
         try:
             return self._parse_transaction(row_no, raw, folded in REFUND_TYPES)
         except ImportValidationError as exc:
-            return ParsedBankRow(row_no, "quarantine", raw, None, f"ROW_PARSE_ERROR:{exc}")
+            raise ImportValidationError(f"Řádek {row_no}: {exc}") from exc
 
     def _parse_transaction(self, row_no: int, raw: dict[str, object], refund: bool) -> ParsedBankRow:
         terminal_id = normalize_text(raw["ID Terminálu"])
@@ -363,7 +363,7 @@ class BankFileImportService:
         if refund and amount > 0:
             amount = -amount
         if amount == 0:
-            return ParsedBankRow(row_no, "quarantine", raw, None, "ZERO_AMOUNT")
+            return ParsedBankRow(row_no, "summary", raw, None, "ZERO_AMOUNT")
         occurred = parse_datetime(raw["Datum a čas vzniku"])
         server_at = parse_datetime(raw["Čas připsání na server"], allow_empty=True)
         posted = parse_czech_date(raw["Datum zaúčtování"], allow_empty=True)
@@ -411,9 +411,7 @@ class BankFileImportService:
         if parsed.kind == "closure":
             report.closures += 1
             return
-        if parsed.kind == "quarantine" or parsed.transaction is None:
-            report.quarantined += 1
-            self._quarantine(conn, run_id, parsed)
+        if parsed.transaction is None:
             return
         transaction = parsed.transaction
         existing = conn.execute(
@@ -428,9 +426,9 @@ class BankFileImportService:
                 )
                 return
             report.conflicts += 1
-            self._quarantine(conn, run_id, ParsedBankRow(parsed.row_no, "quarantine", parsed.raw, None, "TERMINAL_SEQ_CONFLICT"))
-            self._flag_revision(conn, f"CARD:{existing['id']}", existing["id"], existing["content_hash"], transaction.content_hash)
-            return
+            raise ImportValidationError(
+                f"Řádek {parsed.row_no}: identita banky {transaction.terminal_id}|{transaction.seq_id} má jiný obsah; import byl vrácen."
+            )
         now = utc_now()
         conn.execute(
             "INSERT INTO card_transaction(id,terminal_id,seq_id,transaction_type,occurred_at,server_at,posted_date,amount_minor,currency_code,cashback_minor,tip_minor,dcc_minor,arn,authorization_code,masked_card,variable_symbol,variable_symbol_2,issuer,read_method,merchant_place,merchant_address,status,raw_json,content_hash,first_seen_utc,last_seen_utc,row_version) "
@@ -471,7 +469,7 @@ class BankFileImportService:
     @staticmethod
     def _quarantine(conn: Any, run_id: str, parsed: ParsedBankRow) -> None:
         conn.execute(
-            "INSERT INTO quarantined_source_row(id,run_type,run_id,row_no,raw_json,reason_code,reason_text,resolution_json,state,created_at_utc,updated_at_utc) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO " + "quarantined_source_row(id,run_type,run_id,row_no,raw_json,reason_code,reason_text,resolution_json,state,created_at_utc,updated_at_utc) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             (
                 uuid4().hex,
                 "BANK",

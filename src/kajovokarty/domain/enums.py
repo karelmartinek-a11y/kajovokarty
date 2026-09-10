@@ -20,6 +20,7 @@ class MatchStatus(StrEnum):
 
 
 class SourceType(StrEnum):
+    CASHBOOK_CARD = "CASHBOOK_CARD"
     BOOKING = "BOOKING"
     CARD = "CARD"
     CASH = "CASH"

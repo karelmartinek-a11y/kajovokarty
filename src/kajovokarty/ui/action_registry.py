@@ -141,7 +141,7 @@ class ObjectActionRegistry:
         items = list(contexts)
         if not items:
             return [self.specs[action_id] for action_id in (ActionId.UNDO, ActionId.REDO, ActionId.CLEAR_TRAY)]
-        object_types = {item.object_type for item in items}
+        object_types = {"CARD" if item.object_type == "CASHBOOK_CARD" else item.object_type for item in items}
         return [spec for spec in _SPECS if object_types <= spec.object_types or (len(items) > 1 and spec.action_id in {ActionId.PAIR_SELECTED, ActionId.CREATE_GROUP, ActionId.BALANCE_AS_GROUP, ActionId.EXPORT_SELECTION})]
 
     def create_action(self, parent: QWidget, action_id: ActionId, contexts: list[ObjectContext]) -> QAction:
@@ -180,8 +180,8 @@ class ObjectActionRegistry:
         if not contexts:
             return False, "Vyberte položku."
         if action_id in {ActionId.PAIR_SELECTED, ActionId.CREATE_GROUP, ActionId.BALANCE_AS_GROUP}:
-            sides = {"DOCUMENT" if item.object_type == "INVOICE" else "SOURCE" for item in contexts if item.object_type in {"INVOICE", "BOOKING", "CARD", "MANUAL"}}
-            if sides != {"DOCUMENT", "SOURCE"}:
+            sides = {"DOCUMENT" if item.object_type == "INVOICE" else "SOURCE" for item in contexts if item.object_type in {"INVOICE", "BOOKING", "CARD", "CASHBOOK_CARD", "MANUAL"}}
+            if sides not in ({"DOCUMENT", "SOURCE"}, {"SOURCE"}):
                 return False, "Vyberte alespoň jeden doklad a jeden zdroj úhrady."
             currencies = {item.currency for item in contexts if item.currency}
             if len(currencies) > 1:

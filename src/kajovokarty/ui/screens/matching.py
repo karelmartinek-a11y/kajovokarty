@@ -627,6 +627,26 @@ class MatchingScreen(QWidget):
             for row in self.container.database.query("SELECT * FROM manual_settlement WHERE active=1 ORDER BY created_at_utc DESC"):
                 context = ObjectContext("MANUAL", row["id"], row["name"] or ("Hotovost" if row["type"] == "CASH" else "Jiný zdroj"), row["currency_code"], row["amount_minor"], row["row_version"], "MANUAL", "matching", {"group_id": row["group_id"], "note": row["note"], "type": row["type"]})
                 rows.append({"status": "Ručně", "type": "Hotovost" if row["type"] == "CASH" else "Jiný", "date": row["created_at_utc"], "label": context.primary_label, "currency": row["currency_code"], "amount": Money(row["amount_minor"], row["currency_code"]).format(), "remaining": "ve skupině", "_context": context})
+        if source_filter in {"Vše", "Karty"}:
+            cashbook_rows = self.container.database.query(
+                "SELECT * FROM cashbook_card_transaction ORDER BY occurred_at DESC LIMIT 2000"
+            )
+            for row in cashbook_rows:
+                if currency in {"CZK", "EUR"} and row["currency_code"] != currency:
+                    continue
+                if text and not any(text.casefold() in str(row[key] or "").casefold() for key in ("receipt_number", "variable_symbol", "client")):
+                    continue
+                context = ObjectContext(
+                    "CASHBOOK_CARD", row["id"], row["receipt_number"], row["currency_code"],
+                    row["amount_minor"], row["row_version"], row["status"], "matching",
+                    {"raw_json": row["raw_json"], "cashbook_identity": row["cashbook_identity"]},
+                )
+                rows.append({
+                    "status": row["status"], "type": "Pokladna", "date": row["occurred_at"],
+                    "label": f"{row['receipt_number']}\n{row['label']}",
+                    "currency": row["currency_code"], "amount": Money(row["amount_minor"], row["currency_code"]).format(),
+                    "remaining": Money(row["amount_minor"], row["currency_code"]).format(), "_context": context,
+                })
         self.sources.model().set_rows(rows)
 
     def refresh_groups(self) -> None:

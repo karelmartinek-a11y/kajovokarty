@@ -116,6 +116,60 @@ class DocumentPaymentService:
                 progress(index, total, f"Doklady {index}/{len(rows)} – hledám potvrzení úhrady")
         return PaymentMatchResult(matched, partial, skipped, alerts)
 
+    def auto_reconcile(self, *, cancel=None, progress=None) -> PaymentMatchResult:
+        """Explicit cashbook-led reconciliation for the new SSOT workflow.
+
+        A source is consumed only when exactly one same-currency, exact-amount
+        candidate exists. Ambiguous candidates stay visible for manual work.
+        """
+        rows = self.database.query(
+            "SELECT c.id,c.amount_minor,c.currency_code,c.occurred_at FROM cashbook_card_transaction c "
+            "WHERE c.status NOT IN ('AUTO_MATCHED','MANUAL_MATCHED','AGGREGATE_MATCHED','MANUAL_RESOLVED') "
+            "AND NOT EXISTS (SELECT 1 FROM match_group_source s JOIN match_group g ON g.id=s.group_id "
+            "WHERE s.entity_type='CASHBOOK_CARD' AND s.entity_id=c.id AND s.active=1 AND g.status<>'REVERSED') "
+            "ORDER BY c.occurred_at,c.id"
+        )
+        matched = partial = skipped = alerts = 0
+        total = max(1, len(rows))
+        for index, row in enumerate(rows, start=1):
+            if cancel is not None and cancel():
+                break
+            refs = self._cashbook_candidates(str(row["currency_code"]), int(row["amount_minor"]), str(row["occurred_at"]))
+            if len(refs) == 1:
+                try:
+                    group_id, _ = self.pairing.pair_sources([SourceRef(SourceType.CASHBOOK_CARD, str(row["id"])), refs[0]], human_label="Automatické rekonsiliační párování")
+                    self.database.execute("UPDATE match_group SET manual_lock=0 WHERE id=?", (group_id,))
+                    matched += 1
+                except PairingError:
+                    alerts += 1
+            elif len(refs) > 1:
+                skipped += 1
+            else:
+                partial += 1
+            if progress:
+                progress(index, total, f"Pokladna {index}/{len(rows)} – hledám jednoznačný protějšek")
+        return PaymentMatchResult(matched, partial, skipped, alerts)
+
+    def _cashbook_candidates(self, currency: str, amount_minor: int, occurred_at: str) -> list[SourceRef]:
+        target = date.fromisoformat(occurred_at[:10])
+        candidates: list[SourceRef] = []
+        with self.database.read_connection() as conn:
+            rows = conn.execute(
+                "SELECT c.id,c.occurred_at FROM card_transaction c WHERE c.currency_code=? AND c.amount_minor=? "
+                "AND ABS(julianday(substr(c.occurred_at,1,10))-julianday(?))<=2 "
+                "AND NOT EXISTS (SELECT 1 FROM match_group_source s WHERE s.entity_type='CARD' AND s.entity_id=c.id AND s.active=1)",
+                (currency, amount_minor, target.isoformat()),
+            ).fetchall()
+            candidates.extend(SourceRef(SourceType.CARD, str(row["id"])) for row in rows)
+            rows = conn.execute(
+                "SELECT b.row_hash,b.payout_date FROM booking_payment_line b WHERE b.active_source=1 AND b.currency_code=? AND b.amount_minor=? "
+                "AND ABS(julianday(substr(b.payout_date,1,10))-julianday(?))<=2 "
+                "AND NOT EXISTS (SELECT 1 FROM match_group_source s WHERE s.entity_type='BOOKING' AND s.entity_id=b.row_hash AND s.active=1)",
+                (currency, amount_minor, target.isoformat()),
+            ).fetchall()
+            candidates.extend(SourceRef(SourceType.BOOKING, str(row["row_hash"])) for row in rows)
+        return candidates
+
     def _booking_source(self, currency: str, refs: list[str], remaining: int) -> tuple[SourceRef | None, bool]:
         if not refs:
             return None, False

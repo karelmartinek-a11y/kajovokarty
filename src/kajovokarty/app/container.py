@@ -25,6 +25,7 @@ from ..infrastructure.diagnostics.bundle import DiagnosticBundleService
 from ..infrastructure.diagnostics.logging import configure_logging
 from ..infrastructure.importers.bank_file import BankFileImportService
 from ..infrastructure.importers.booking_csv import BookingCsvImportService
+from ..infrastructure.importers.cashbook_xls import CashbookFileImportService
 from ..infrastructure.persistence.database import Database
 from ..infrastructure.security.secrets import SecretStore
 from .paths import AppPaths
@@ -41,6 +42,7 @@ class ServiceContainer:
     secrets: SecretStore
     booking_import: BookingCsvImportService
     bank_import: BankFileImportService
+    cashbook_import: CashbookFileImportService
     import_preflight: ImportPreflightService
     quarantine: QuarantineService
     better_hotel_sync: BetterHotelSyncService
@@ -73,6 +75,7 @@ class ServiceContainer:
         search = SearchService(database)
         booking_import = BookingCsvImportService(database)
         bank_import = BankFileImportService(database)
+        cashbook_import = CashbookFileImportService(database)
         backup = BackupService(database, app_paths, audit, settings)
         container = cls(
             paths=app_paths,
@@ -84,6 +87,7 @@ class ServiceContainer:
             secrets=secrets,
             booking_import=booking_import,
             bank_import=bank_import,
+            cashbook_import=cashbook_import,
             import_preflight=ImportPreflightService(database, booking_import, bank_import),
             quarantine=QuarantineService(database, audit, booking_import, bank_import),
             better_hotel_sync=BetterHotelSyncService(database, ReservationReferenceParser()),
